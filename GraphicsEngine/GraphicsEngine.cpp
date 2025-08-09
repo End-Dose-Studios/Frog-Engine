@@ -14,7 +14,7 @@ namespace Graphics {
     void GraphicsEngine::StartGraphicsEngine() {
         if (engineCorePtr->selectedAPI == GraphicsAPI::Vulkan) {
             println(std::cout, "------------Starting-Vulkan-Graphics------------");
-            vulkanGraphics.InitVulkanGraphics(engineCorePtr->GetVulkanEnginePtr());
+            vulkanGraphics.InitGraphics(engineCorePtr->GetVulkanEnginePtr());
             println(std::cout, "------------Finished-Vulkan-Graphics------------\n");
         }
         else if (engineCorePtr->selectedAPI == GraphicsAPI::OpenGL) {

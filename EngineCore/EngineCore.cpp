@@ -40,7 +40,7 @@ namespace EngineCore {
     EngineCore::EngineCore() = default;
     EngineCore::~EngineCore() = default;
 
-    VulkanEngine *EngineCore::GetVulkanEnginePtr() { return &vulkanEngine; }
+    Vulkan::Engine *EngineCore::GetVulkanEnginePtr() { return &vulkanEngine; }
 
     void EngineCore::StartEngineCore() {
         selectedAPI = detectAPI();
@@ -56,7 +56,7 @@ namespace EngineCore {
                 windowPtr = window.window;
                 println(std::cout, "------------Finished-Window-Creation------------\n");
                 println(std::cout, "-------------Starting-Vulkan-Engine-------------");
-                vulkanEngine.InitVulkanEngine(this);
+                vulkanEngine.InitEngine(this);
                 println(std::cout, "-------------Finished-Vulkan-Engine-------------\n");
             }
             catch (const vk::SystemError &err) {

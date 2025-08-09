@@ -1,14 +1,14 @@
 #include "VulkanGraphics.h"
 #include "../../EngineCore/VulkanEngine/VulkanEngine.h"
 
-namespace Graphics {
-    VulkanGraphics::VulkanGraphics() = default;
-    VulkanGraphics::~VulkanGraphics() {
+namespace Graphics::Vulkan {
+    Graphics::Graphics() = default;
+    Graphics::~Graphics() {
         DestroySwapchainImages();
         DestroySwapChain();
     };
 
-    void VulkanGraphics::InitVulkanGraphics(EngineCore::VulkanEngine *vulkan_engine_ptr) {
+    void Graphics::InitGraphics(EngineCore::Vulkan::Engine *vulkan_engine_ptr) {
         vulkanEnginePtr = vulkan_engine_ptr;
         windowPtr = vulkan_engine_ptr->windowPtr;
 
@@ -17,4 +17,4 @@ namespace Graphics {
     }
 
 
-} // namespace Graphics
+} // namespace Graphics::Vulkan

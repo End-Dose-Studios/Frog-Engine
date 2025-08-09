@@ -24,10 +24,9 @@ int main() {
     graphics_engine.StartGraphicsEngine();
 
     // TODO Create Asset Manager
-    Assets::AssetEngine asset_engine;
+    Assets::AssetEngine asset_engine(&engine_core);
     asset_engine.InitLoader();
-    Assets::Package *global_pack = asset_engine.LoadPackage("Global");
-    asset_engine.UnloadPackage(global_pack);
+    auto global_pack = asset_engine.LoadPackage("Global");
 
     // TODO Relocate To Engine Core
     while (!glfwWindowShouldClose(window)) {
@@ -37,6 +36,7 @@ int main() {
         }
     }
 
+    asset_engine.UnloadPackage(global_pack);
     println(std::cout, "\n-------------------Cleaning-Up------------------");
     return EXIT_SUCCESS;
 }

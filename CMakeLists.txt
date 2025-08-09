@@ -55,6 +55,8 @@ add_executable(FrogEngine Assets/App.rc
         GraphicsEngine/VulkanGraphics/VulkanGraphics.h
         GraphicsEngine/VulkanGraphics/Swapchain.cpp
         GraphicsEngine/VulkanGraphics/SwapchainImages.cpp
+        AssetEngine/VulkanAssets/VulkanAssets.cpp
+        AssetEngine/VulkanAssets/VulkanAssets.h
 )
 
 #Attach GLFW Include to Project

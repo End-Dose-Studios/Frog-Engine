@@ -4,26 +4,26 @@
 #include <vulkan/vulkan.hpp>
 
 class GLFWwindow;
-namespace EngineCore {
-    class VulkanEngine;
+namespace EngineCore::Vulkan {
+    class Engine;
 }
 
-namespace Graphics {
+namespace Graphics::Vulkan {
     struct SwapchainDetails {
         vk::SurfaceCapabilitiesKHR capabilities{};
         std::vector<vk::SurfaceFormatKHR> formats;
         std::vector<vk::PresentModeKHR> presentModes;
     };
 
-    class VulkanGraphics {
+    class Graphics {
     public:
-        VulkanGraphics();
-        ~VulkanGraphics();
+        Graphics();
+        ~Graphics();
 
-        void InitVulkanGraphics(EngineCore::VulkanEngine *vulkan_engine_ptr);
+        void InitGraphics(EngineCore::Vulkan::Engine *vulkan_engine_ptr);
 
     private:
-        EngineCore::VulkanEngine *vulkanEnginePtr;
+        EngineCore::Vulkan::Engine *vulkanEnginePtr;
         GLFWwindow *windowPtr;
 
         void CreateSwapchain();
@@ -39,4 +39,4 @@ namespace Graphics {
         std::vector<vk::Image> swapchainImages;
         std::vector<vk::ImageView> swapchainImageViews;
     };
-} // namespace Graphics
+} // namespace Graphics::Vulkan

@@ -4,8 +4,8 @@
 
 #include "VulkanEngine.h"
 
-namespace EngineCore {
-    void VulkanEngine::CreateLogicalDevice() {
+namespace EngineCore::Vulkan {
+    void Engine::CreateLogicalDevice() {
         std::set const queue_indices{queueIndices.graphicsFamily, queueIndices.presentFamily,
                                      queueIndices.computeFamily, queueIndices.transferFamily};
 
@@ -48,11 +48,11 @@ namespace EngineCore {
         vkGraphicsQueue = vkDevice.getQueue(queueIndices.computeFamily, 0);
     }
 
-    void VulkanEngine::DestroyLogicalDevice() const {
+    void Engine::DestroyLogicalDevice() const {
         vkDevice.destroy();
         println(std::cout, "-----Logical-Device-Destroyed-----");
     }
 
-    const vk::Device *VulkanEngine::GetDevicePtr() const { return &vkDevice; }
+    const vk::Device *Engine::GetDevicePtr() const { return &vkDevice; }
 
-} // namespace EngineCore
+} // namespace EngineCore::Vulkan

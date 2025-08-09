@@ -44,9 +44,9 @@ namespace {
     }
 } // namespace
 
-namespace EngineCore {
+namespace EngineCore::Vulkan {
 
-    void VulkanEngine::CreateDebugMessenger() {
+    void Engine::CreateDebugMessenger() {
         if (!enableDebugExtensions)
             return;
 
@@ -70,7 +70,7 @@ namespace EngineCore {
         println(std::cout, "-----Debug-Messenger-Created------");
     }
 
-    void VulkanEngine::DestroyDebugMessenger() const {
+    void Engine::DestroyDebugMessenger() const {
         if (!enableDebugExtensions)
             return;
 
@@ -79,4 +79,4 @@ namespace EngineCore {
         println(std::cout, "-----Debug-Messenger-Destroyed----");
     }
 
-} // namespace EngineCore
+} // namespace EngineCore::Vulkan

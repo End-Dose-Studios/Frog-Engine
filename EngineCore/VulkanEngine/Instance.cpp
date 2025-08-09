@@ -34,7 +34,7 @@ namespace {
                           { return strcmp(ext, extensionName) == 0; }); // NOLINT
         }
         if (!extensions_check.empty()) {
-            throw std::exception("Missing required extensions.");
+            throw std::runtime_error("Missing required extensions.");
         }
 
         println(std::cout, "Instance Extensions:");
@@ -59,7 +59,7 @@ namespace {
                           { return strcmp(ext, available_layer.layerName) == 0; }); // NOLINT
         }
         if (!layer_check.empty()) {
-            throw std::exception("Missing required layers.");
+            throw std::runtime_error("Missing required layers.");
         }
 
         println(std::cout, "Instance Layers:");
@@ -71,8 +71,8 @@ namespace {
     }
 } // namespace
 
-namespace EngineCore {
-    void VulkanEngine::CreateInstance() {
+namespace EngineCore::Vulkan {
+    void Engine::CreateInstance() {
         vk::ApplicationInfo app_info;
         app_info.pApplicationName = "FrogEngine";
         app_info.applicationVersion = vk::makeApiVersion(0, 1, 0, 0);
@@ -95,13 +95,13 @@ namespace EngineCore {
         println(std::cout, "---------Instance-Created---------");
     }
 
-    void VulkanEngine::DestroyInstance() const {
+    void Engine::DestroyInstance() const {
         vkInstance.destroy();
         println(std::cout, "--------Instance Destroyed--------");
     }
 
 
-    vk::Instance *VulkanEngine::GetInstancePtr() { return &vkInstance; }
+    vk::Instance *Engine::GetInstancePtr() { return &vkInstance; }
 
 
-} // namespace EngineCore
+} // namespace EngineCore::Vulkan

@@ -20,6 +20,6 @@ namespace Graphics {
         EngineCore::EngineCore *engineCorePtr;
         GLFWwindow *windowPtr;
 
-        VulkanGraphics vulkanGraphics;
+        Vulkan::Graphics vulkanGraphics;
     };
 } // namespace Graphics

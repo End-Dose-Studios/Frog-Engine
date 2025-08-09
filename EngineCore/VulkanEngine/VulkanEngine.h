@@ -3,8 +3,12 @@
 #include <vulkan/vulkan.hpp>
 
 class GLFWwindow;
+
 namespace EngineCore {
     class EngineCore;
+}
+
+namespace EngineCore::Vulkan {
 
     struct QueueFamilyIndices {
         uint32_t graphicsFamily{UINT32_MAX};
@@ -26,12 +30,12 @@ namespace EngineCore {
         }
     };
 
-    class VulkanEngine {
+    class Engine {
     public:
-        VulkanEngine();
-        ~VulkanEngine();
+        Engine();
+        ~Engine();
 
-        void InitVulkanEngine(const EngineCore *engine_core);
+        void InitEngine(const EngineCore *engine_core);
 
         vk::Instance *GetInstancePtr();
         const vk::SurfaceKHR *GetSurfacePtr() const;
@@ -75,4 +79,4 @@ namespace EngineCore {
         vk::Queue vkTransferQueue;
         vk::Queue vkComputeQueue;
     };
-} // namespace EngineCore
+} // namespace EngineCore::Vulkan

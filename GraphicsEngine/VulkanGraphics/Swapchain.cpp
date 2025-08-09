@@ -6,10 +6,10 @@
 #include "VulkanGraphics.h"
 
 namespace {
-    Graphics::SwapchainDetails getSwapChainDetails(const vk::PhysicalDevice *device,
-                                                   const vk::SurfaceKHR *surface) {
+    Graphics::Vulkan::SwapchainDetails getSwapChainDetails(const vk::PhysicalDevice *device,
+                                                           const vk::SurfaceKHR *surface) {
 
-        Graphics::SwapchainDetails swapchainDetails;
+        Graphics::Vulkan::SwapchainDetails swapchainDetails;
 
         swapchainDetails.capabilities = device->getSurfaceCapabilitiesKHR(*surface);
         swapchainDetails.formats = device->getSurfaceFormatsKHR(*surface);
@@ -23,7 +23,7 @@ namespace {
         return swapchainDetails;
     }
 
-    vk::SurfaceFormatKHR getFormat(const Graphics::SwapchainDetails *details) {
+    vk::SurfaceFormatKHR getFormat(const Graphics::Vulkan::SwapchainDetails *details) {
         vk::SurfaceFormatKHR surface_format = details->formats[0];
 
         for (const auto &format: details->formats) {
@@ -36,7 +36,7 @@ namespace {
         return surface_format;
     }
 
-    vk::PresentModeKHR getPresent(const Graphics::SwapchainDetails *swap_chain_details) {
+    vk::PresentModeKHR getPresent(const Graphics::Vulkan::SwapchainDetails *swap_chain_details) {
         auto surface_present_mode = vk::PresentModeKHR::eFifo;
 
         for (const auto &present_mode: swap_chain_details->presentModes) {
@@ -48,7 +48,7 @@ namespace {
         return surface_present_mode;
     }
 
-    vk::Extent2D getExtent(const Graphics::SwapchainDetails *swap_chain_details,
+    vk::Extent2D getExtent(const Graphics::Vulkan::SwapchainDetails *swap_chain_details,
                            GLFWwindow *window) {
         vk::Extent2D extent;
         if (swap_chain_details->capabilities.currentExtent.width !=
@@ -77,7 +77,7 @@ namespace {
         return extent;
     }
 
-    uint32_t getImageCount(const Graphics::SwapchainDetails *swap_chain_details) {
+    uint32_t getImageCount(const Graphics::Vulkan::SwapchainDetails *swap_chain_details) {
         uint32_t image_count = swap_chain_details->capabilities.minImageCount + 1;
         if (swap_chain_details->capabilities.maxImageCount > 0 &&
             image_count > swap_chain_details->capabilities.maxImageCount) {
@@ -89,8 +89,8 @@ namespace {
     }
 } // namespace
 
-namespace Graphics {
-    void VulkanGraphics::CreateSwapchain() {
+namespace Graphics::Vulkan {
+    void Graphics::CreateSwapchain() {
         swapchainDetails = getSwapChainDetails(vulkanEnginePtr->GetPhysicalDevicePtr(),
                                                vulkanEnginePtr->GetSurfacePtr());
 
@@ -107,7 +107,7 @@ namespace Graphics {
         swapchain_info.imageArrayLayers = 1;
         swapchain_info.imageUsage = vk::ImageUsageFlagBits::eColorAttachment;
 
-        const EngineCore::QueueFamilyIndices *queue_indices =
+        const EngineCore::Vulkan::QueueFamilyIndices *queue_indices =
                 vulkanEnginePtr->GetQueueFamilyIndicesPtr();
 
         const std::array<uint32_t, 2> queue_family_indices = {queue_indices->graphicsFamily,
@@ -132,9 +132,9 @@ namespace Graphics {
         println(std::cout, "---------Swapchain-Created--------");
     }
 
-    void VulkanGraphics::DestroySwapChain() const {
+    void Graphics::DestroySwapChain() const {
         vulkanEnginePtr->GetDevicePtr()->destroySwapchainKHR(vkSwapchain);
         println(std::cout, "-------Swapchain-Destroyed--------");
     }
 
-} // namespace Graphics
+} // namespace Graphics::Vulkan

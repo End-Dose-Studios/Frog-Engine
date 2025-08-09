@@ -16,7 +16,7 @@ namespace EngineCore {
 
         void StartEngineCore();
 
-        VulkanEngine *GetVulkanEnginePtr();
+        Vulkan::Engine *GetVulkanEnginePtr();
 
         GraphicsAPI selectedAPI = GraphicsAPI::Vulkan;
         GLFWwindow *windowPtr{nullptr};
@@ -24,6 +24,6 @@ namespace EngineCore {
     private:
         Window window;
 
-        VulkanEngine vulkanEngine;
+        Vulkan::Engine vulkanEngine;
     };
 } // namespace EngineCore

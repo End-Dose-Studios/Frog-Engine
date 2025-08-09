@@ -3,8 +3,8 @@
 #include "../../EngineCore/VulkanEngine/VulkanEngine.h"
 #include "VulkanGraphics.h"
 
-namespace Graphics {
-    void VulkanGraphics::CreateSwapchainImages() {
+namespace Graphics::Vulkan {
+    void Graphics::CreateSwapchainImages() {
         swapchainImages = vulkanEnginePtr->GetDevicePtr()->getSwapchainImagesKHR(vkSwapchain);
 
         for (const auto &image: swapchainImages) {
@@ -34,11 +34,11 @@ namespace Graphics {
         }
     }
 
-    void VulkanGraphics::DestroySwapchainImages() const {
+    void Graphics::DestroySwapchainImages() const {
         for (const auto &image_view: swapchainImageViews) {
             vulkanEnginePtr->GetDevicePtr()->destroyImageView(image_view);
             println(std::cout, "-------Image-View-Destroyed-------");
         }
     }
 
-} // namespace Graphics
+} // namespace Graphics::Vulkan

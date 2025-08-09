@@ -6,20 +6,20 @@
 
 #include "VulkanEngine.h"
 
-namespace EngineCore {
-    void VulkanEngine::CreateSurface() {
+namespace EngineCore::Vulkan {
+    void Engine::CreateSurface() {
         VkSurfaceKHR surface;
         glfwCreateWindowSurface(vkInstance, windowPtr, nullptr, &surface);
         vkSurface = surface;
         println(std::cout, "----------Surface-Created---------");
     }
 
-    void VulkanEngine::DestroySurface() const {
+    void Engine::DestroySurface() const {
         vkInstance.destroySurfaceKHR(vkSurface);
         println(std::cout, "---------Surface-Destroyed--------");
     }
 
-    const vk::SurfaceKHR *VulkanEngine::GetSurfacePtr() const { return &vkSurface; }
+    const vk::SurfaceKHR *Engine::GetSurfacePtr() const { return &vkSurface; }
 
 
-} // namespace EngineCore
+} // namespace EngineCore::Vulkan

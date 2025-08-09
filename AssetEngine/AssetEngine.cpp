@@ -25,23 +25,34 @@ namespace {
 } // namespace
 
 namespace Assets {
-    AssetEngine::AssetEngine() = default;
+    AssetEngine::AssetEngine(EngineCore::EngineCore *engine_core_ptr) {
+        engineCorePtr = engine_core_ptr;
+    };
     AssetEngine::~AssetEngine() = default;
 
     void AssetEngine::InitLoader() {
+        std::println(std::cout, "--------------Staring-Asset-Engine--------------");
+
         std::array<char, MAX_PATH> path{};
         const DWORD length =
                 GetModuleFileNameA(nullptr, path.data(), static_cast<DWORD>(path.size()));
-        LoaderCheck(length > 0 && length < path.size(), "Finding Executable Path...");
 
         const std::filesystem::path app_path = std::string(path.data(), length);
-        const std::filesystem::path package_directory = app_path.parent_path().append("Packages");
+        if (!exists(app_path)) {
+            throw std::runtime_error("Failed to get the path of the executable.");
+        }
 
-        LoaderCheck(is_directory(package_directory), "Finding Package Directory...");
+        const std::filesystem::path package_directory = app_path.parent_path().append("Packages");
+        if (!exists(package_directory)) {
+            throw std::runtime_error("Could not find packages directory");
+        }
+        println(std::cout, "Found: {}", package_directory.string());
 
         for (const auto &package: std::filesystem::directory_iterator(package_directory)) {
             if (!is_regular_file(package))
                 continue;
+
+            println(std::cout, "  {}", package.path().string());
 
             PackageReference package_reference;
             package_reference.name = package.path().stem().string();
@@ -49,6 +60,8 @@ namespace Assets {
 
             packageReferences.emplace_back(package_reference);
         }
+        println(std::cout, "----------Packages-Found----------");
+        std::println(std::cout, "-------------Finished-Asset-Engine--------------");
     }
 
     Package *AssetEngine::LoadPackage(const char *package_name) {
@@ -64,7 +77,9 @@ namespace Assets {
             name = pack_name;
 
             std::ifstream file(pack_path, std::ios::binary);
-            LoaderCheck(file.is_open(), "Opening Package File...");
+            if (!file.is_open()) {
+                throw std::runtime_error("Could not open package file.");
+            }
 
             uint32_t magic_string{};
             readUInt(file, magic_string);
@@ -106,7 +121,7 @@ namespace Assets {
     }
 
     Asset *Package::QueryAssets(AssetType type, const std::string &name) {
-        if (const auto asset = assetMap.find({type, std::string{name}}); asset != assetMap.end()) {
+        if (const auto asset = assetMap.find({type, name}); asset != assetMap.end()) {
             return asset->second;
         }
         return nullptr;

@@ -1,17 +1,16 @@
 #include "VulkanEngine.h"
-
 #include "../EngineCore.h"
 
-namespace EngineCore {
-    VulkanEngine::VulkanEngine() = default;
-    VulkanEngine::~VulkanEngine() {
+namespace EngineCore::Vulkan {
+    Engine::Engine() = default;
+    Engine::~Engine() {
         DestroyLogicalDevice();
         DestroySurface();
         DestroyDebugMessenger();
         DestroyInstance();
     };
 
-    void VulkanEngine::InitVulkanEngine(const EngineCore *engine_core) {
+    void Engine::InitEngine(const EngineCore *engine_core) {
         windowPtr = engine_core->windowPtr;
 
         CreateInstance();
@@ -23,4 +22,4 @@ namespace EngineCore {
     }
 
 
-} // namespace EngineCore
+} // namespace EngineCore::Vulkan

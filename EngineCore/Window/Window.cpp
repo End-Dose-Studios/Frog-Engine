@@ -16,7 +16,7 @@ namespace EngineCore {
             glfwDestroyWindow(window);
             println(std::cout, "Destroyed Previous Window");
         }
-        
+
         monitor = glfwGetPrimaryMonitor();
         mode = glfwGetVideoMode(monitor);
         window = glfwCreateWindow(width, height, "Frog Engine", nullptr, nullptr);

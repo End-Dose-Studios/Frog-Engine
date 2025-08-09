@@ -98,9 +98,9 @@ namespace {
     }
 } // namespace
 
-namespace EngineCore {
-    void VulkanEngine::GetPhysicalDevices() {
-        println(std::cout, "----Finding-All-Vulkan-Devices----");
+namespace EngineCore::Vulkan {
+    void Engine::GetPhysicalDevices() {
+        println(std::cout, "----Finding-All-Engine-Devices----");
 
         const std::vector<vk::PhysicalDevice> devices = vkInstance.enumeratePhysicalDevices();
 
@@ -121,6 +121,6 @@ namespace EngineCore {
                      selectedDevice->getProperties().deviceName.data());
     }
 
-    vk::PhysicalDevice *VulkanEngine::GetPhysicalDevicePtr() const { return selectedDevice; }
+    vk::PhysicalDevice *Engine::GetPhysicalDevicePtr() const { return selectedDevice; }
 
-} // namespace EngineCore
+} // namespace EngineCore::Vulkan
