@@ -15,8 +15,11 @@ namespace EngineCore {
     }
 
     void VulkanEngine::DestroySurface() const {
-        vkDestroySurfaceKHR(vkInstance, vkSurface, nullptr);
+        vkInstance.destroySurfaceKHR(vkSurface);
         println(std::cout, "---------Surface-Destroyed--------");
     }
+
+    const vk::SurfaceKHR *VulkanEngine::GetSurfacePtr() const { return &vkSurface; }
+
 
 } // namespace EngineCore

@@ -34,7 +34,10 @@ namespace EngineCore {
         void InitVulkanEngine(const EngineCore *engine_core);
 
         vk::Instance *GetInstancePtr();
+        const vk::SurfaceKHR *GetSurfacePtr() const;
         vk::PhysicalDevice *GetPhysicalDevicePtr() const;
+        const QueueFamilyIndices *GetQueueFamilyIndicesPtr() const;
+        const vk::Device *GetDevicePtr() const;
 
 #ifndef NDEBUG
         bool enableDebugExtensions{true};
@@ -42,9 +45,9 @@ namespace EngineCore {
         bool enableDebugExtensions{false};
 #endif
 
-    private:
         GLFWwindow *windowPtr;
 
+    private:
         void CreateInstance();
         void DestroyInstance() const;
         vk::Instance vkInstance;

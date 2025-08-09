@@ -83,15 +83,15 @@ namespace EngineCore {
         const std::vector<const char *> extensions = getExtensions(enableDebugExtensions);
         const std::vector<const char *> layers = getLayers(enableDebugExtensions);
 
-        vk::InstanceCreateInfo instance_create_info;
-        instance_create_info.flags = vk::InstanceCreateFlagBits::eEnumeratePortabilityKHR;
-        instance_create_info.pApplicationInfo = &app_info;
-        instance_create_info.enabledLayerCount = static_cast<uint32_t>(layers.size());
-        instance_create_info.ppEnabledLayerNames = layers.data();
-        instance_create_info.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
-        instance_create_info.ppEnabledExtensionNames = extensions.data();
+        vk::InstanceCreateInfo instance_info;
+        instance_info.flags = vk::InstanceCreateFlagBits::eEnumeratePortabilityKHR;
+        instance_info.pApplicationInfo = &app_info;
+        instance_info.enabledLayerCount = static_cast<uint32_t>(layers.size());
+        instance_info.ppEnabledLayerNames = layers.data();
+        instance_info.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+        instance_info.ppEnabledExtensionNames = extensions.data();
 
-        vkInstance = vk::createInstance(instance_create_info);
+        vkInstance = vk::createInstance(instance_info);
         println(std::cout, "---------Instance-Created---------");
     }
 

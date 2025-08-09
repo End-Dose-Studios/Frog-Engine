@@ -56,4 +56,7 @@ namespace EngineCore {
         std::println(std::cout, "  Transfer: {}", queueIndices.transferFamily);
         std::println(std::cout, "  Compute: {}", queueIndices.computeFamily);
     }
+
+    const QueueFamilyIndices *VulkanEngine::GetQueueFamilyIndicesPtr() const { return &queueIndices; }
+
 } // namespace EngineCore

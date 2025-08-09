@@ -1,5 +1,7 @@
 #pragma once
 
+#include "VulkanGraphics/VulkanGraphics.h"
+
 class GLFWwindow;
 namespace EngineCore {
     class EngineCore;
@@ -16,7 +18,8 @@ namespace Graphics {
 
     private:
         EngineCore::EngineCore *engineCorePtr;
-        EngineCore::VulkanEngine *vulkanEnginePtr;
         GLFWwindow *windowPtr;
+
+        VulkanGraphics vulkanGraphics;
     };
 } // namespace Graphics

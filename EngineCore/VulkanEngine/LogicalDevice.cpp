@@ -52,4 +52,7 @@ namespace EngineCore {
         vkDevice.destroy();
         println(std::cout, "-----Logical-Device-Destroyed-----");
     }
+
+    const vk::Device *VulkanEngine::GetDevicePtr() const { return &vkDevice; }
+
 } // namespace EngineCore

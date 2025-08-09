@@ -54,10 +54,10 @@ namespace EngineCore {
                 glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
                 window.InitWindow();
                 windowPtr = window.window;
-                println(std::cout, "------------Finished-Window-Creation------------");
-                println(std::cout, "--------------Starting-Vulkan-Base--------------");
+                println(std::cout, "------------Finished-Window-Creation------------\n");
+                println(std::cout, "-------------Starting-Vulkan-Engine-------------");
                 vulkanEngine.InitVulkanEngine(this);
-                println(std::cout, "-------------Finished-Vulkan-Engine-------------");
+                println(std::cout, "-------------Finished-Vulkan-Engine-------------\n");
             }
             catch (const vk::SystemError &err) {
                 std::println(std::cerr, "Vulkan system error: {}", err.what());

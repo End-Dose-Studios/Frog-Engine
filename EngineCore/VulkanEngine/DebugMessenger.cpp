@@ -50,21 +50,19 @@ namespace EngineCore {
         if (!enableDebugExtensions)
             return;
 
-        vk::DebugUtilsMessengerCreateInfoEXT debug_messenger_create_info{};
-        debug_messenger_create_info.messageSeverity =
-                vk::DebugUtilsMessageSeverityFlagBitsEXT::eVerbose |
-                vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning |
-                vk::DebugUtilsMessageSeverityFlagBitsEXT::eError;
-        debug_messenger_create_info.messageType =
-                vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral |
-                vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation |
-                vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance;
-        debug_messenger_create_info.pfnUserCallback = debugCallback;
-        debug_messenger_create_info.pUserData = nullptr;
+        vk::DebugUtilsMessengerCreateInfoEXT debug_messenger_info{};
+        debug_messenger_info.messageSeverity = vk::DebugUtilsMessageSeverityFlagBitsEXT::eVerbose |
+                                               vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning |
+                                               vk::DebugUtilsMessageSeverityFlagBitsEXT::eError;
+        debug_messenger_info.messageType = vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral |
+                                           vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation |
+                                           vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance;
+        debug_messenger_info.pfnUserCallback = debugCallback;
+        debug_messenger_info.pUserData = nullptr;
 
         if (const vk::detail::DispatchLoaderDynamic instanceLoader(vkInstance,
                                                                    vkGetInstanceProcAddr);
-            vkInstance.createDebugUtilsMessengerEXT(&debug_messenger_create_info, nullptr,
+            vkInstance.createDebugUtilsMessengerEXT(&debug_messenger_info, nullptr,
                                                     &vkDebugMessenger,
                                                     instanceLoader) != vk::Result::eSuccess) {
             throw std::runtime_error("Failed to create debug messenger");

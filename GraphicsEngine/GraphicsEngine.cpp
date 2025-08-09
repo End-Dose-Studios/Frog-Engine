@@ -1,16 +1,25 @@
-#include "GraphicsEngine.h"
+#include <iostream>
+
 #include "../EngineCore/EngineCore.h"
+#include "GraphicsEngine.h"
 
 namespace Graphics {
     GraphicsEngine::GraphicsEngine(EngineCore::EngineCore *engine_core_ptr) {
         engineCorePtr = engine_core_ptr;
-        vulkanEnginePtr = engine_core_ptr->GetVulkanEnginePtr();
         windowPtr = engine_core_ptr->windowPtr;
     };
 
     GraphicsEngine::~GraphicsEngine() = default;
 
-    void GraphicsEngine::StartGraphicsEngine() {}
-
+    void GraphicsEngine::StartGraphicsEngine() {
+        if (engineCorePtr->selectedAPI == GraphicsAPI::Vulkan) {
+            println(std::cout, "------------Starting-Vulkan-Graphics------------");
+            vulkanGraphics.InitVulkanGraphics(engineCorePtr->GetVulkanEnginePtr());
+            println(std::cout, "------------Finished-Vulkan-Graphics------------\n");
+        }
+        else if (engineCorePtr->selectedAPI == GraphicsAPI::OpenGL) {
+            // TODO
+        }
+    }
 
 } // namespace Graphics
