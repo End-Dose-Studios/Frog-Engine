@@ -8,7 +8,7 @@ namespace {
 
         const auto available_extensions = device->enumerateDeviceExtensionProperties();
 
-        std::vector<const char *> extension_check{VK_KHR_SWAPCHAIN_EXTENSION_NAME};
+        std::vector<const char *> extension_check{vk::KHRSwapchainExtensionName};
         for (const auto [extensionName, specVersion]: available_extensions) {
             std::erase_if(extension_check, [&](const char *ext)
                           { return strcmp(ext, extensionName) == 0; }); // NOLINT
@@ -34,12 +34,12 @@ namespace {
                      vk::apiVersionMinor(device_properties.apiVersion),
                      vk::apiVersionPatch(device_properties.apiVersion));
 
-        constexpr uint32_t DEVICE_TYPE_WEIGHT{1000};
+        constexpr int DEVICE_TYPE_WEIGHT{1000};
         score += device_properties.deviceType == vk::PhysicalDeviceType::eDiscreteGpu
                          ? DEVICE_TYPE_WEIGHT
                          : -DEVICE_TYPE_WEIGHT;
 
-        constexpr uint32_t VULKAN_VERSION_MINOR_WEIGHT{50};
+        constexpr int VULKAN_VERSION_MINOR_WEIGHT{50};
         score += VULKAN_VERSION_MINOR_WEIGHT * vk::apiVersionMinor(device_properties.apiVersion);
 
         return score;
@@ -120,4 +120,7 @@ namespace EngineCore {
         std::println(std::cout, "Selected Device: {}",
                      selectedDevice->getProperties().deviceName.data());
     }
+
+    vk::PhysicalDevice *VulkanEngine::GetPhysicalDevicePtr() const { return selectedDevice; }
+
 } // namespace EngineCore

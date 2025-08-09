@@ -2,7 +2,10 @@
 
 #include <vulkan/vulkan.hpp>
 
+class GLFWwindow;
 namespace EngineCore {
+    class EngineCore;
+
     struct QueueFamilyIndices {
         uint32_t graphicsFamily{UINT32_MAX};
         uint32_t computeFamily{UINT32_MAX};
@@ -28,10 +31,10 @@ namespace EngineCore {
         VulkanEngine();
         ~VulkanEngine();
 
-        void InitVulkanEngine();
+        void InitVulkanEngine(const EngineCore *engine_core);
 
         vk::Instance *GetInstancePtr();
-        vk::PhysicalDevice *GetPhysicalDevicePtr();
+        vk::PhysicalDevice *GetPhysicalDevicePtr() const;
 
 #ifndef NDEBUG
         bool enableDebugExtensions{true};
@@ -40,6 +43,8 @@ namespace EngineCore {
 #endif
 
     private:
+        GLFWwindow *windowPtr;
+
         void CreateInstance();
         void DestroyInstance() const;
         vk::Instance vkInstance;
@@ -52,7 +57,19 @@ namespace EngineCore {
         std::vector<vk::PhysicalDevice> physicalDevices;
         vk::PhysicalDevice *selectedDevice{nullptr};
 
-        void GetQueueFamilyIndices(const vk::SurfaceKHR *surface);
-        QueueFamilyIndices queueFamilies;
+        void CreateSurface();
+        void DestroySurface() const;
+        vk::SurfaceKHR vkSurface;
+
+        void GetQueueFamilyIndices();
+        QueueFamilyIndices queueIndices;
+
+        void CreateLogicalDevice();
+        void DestroyLogicalDevice() const;
+        vk::Device vkDevice;
+        vk::Queue vkGraphicsQueue;
+        vk::Queue vkPresentQueue;
+        vk::Queue vkTransferQueue;
+        vk::Queue vkComputeQueue;
     };
 } // namespace EngineCore

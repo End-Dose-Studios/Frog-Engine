@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include "EngineCore/EngineCore.h"
+#include "GraphicsEngine/GraphicsEngine.h"
 #include "Loader/Loader.h"
 
 int main() {
@@ -17,7 +18,10 @@ int main() {
 
     EngineCore::EngineCore engine_core;
     engine_core.StartEngineCore();
-    GLFWwindow *window = engine_core.GetWindowPtr();
+    GLFWwindow *window = engine_core.windowPtr;
+
+    Graphics::GraphicsEngine graphics_engine(&engine_core);
+    graphics_engine.StartGraphicsEngine();
 
     // TODO Create Asset Manager
     Resources::Loader loader;

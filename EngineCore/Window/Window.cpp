@@ -17,7 +17,7 @@ namespace EngineCore {
             println(std::cout, "Destroyed Previous Window");
         }
 
-        glfwWindowHint(GLFW_RESIZABLE , GLFW_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
         monitor = glfwGetPrimaryMonitor();
         mode = glfwGetVideoMode(monitor);
@@ -45,7 +45,6 @@ namespace EngineCore {
         glfwSetWindowMonitor(window, nullptr, posX, posY, width, height, GLFW_DONT_CARE);
     }
 
-    GLFWwindow *Window::GetWindowPtr() const { return window; }
     bool Window::GetFullscreen() const { return fullscreen; }
 
 } // namespace EngineCore

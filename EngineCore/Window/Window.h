@@ -12,13 +12,12 @@ namespace EngineCore {
 
         void InitWindow();
 
-        [[nodiscard]] GLFWwindow *GetWindowPtr() const;
         [[nodiscard]] bool GetFullscreen() const;
-
         void SetFullscreen(bool new_fullscreen);
 
-    private:
         GLFWwindow *window{nullptr};
+
+    private:
         GLFWmonitor *monitor{nullptr};
         const GLFWvidmode *mode{nullptr};
 

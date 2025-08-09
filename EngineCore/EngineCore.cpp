@@ -1,10 +1,10 @@
 #include <iostream>
 
+#include <GLFW/glfw3.h>
 #include <vulkan/vulkan.hpp>
 
 #include "EngineCore.h"
-
-#include <GLFW/glfw3.h>
+#include "VulkanEngine/VulkanEngine.h"
 
 namespace {
     GraphicsAPI detectAPI() {
@@ -40,7 +40,6 @@ namespace EngineCore {
     EngineCore::EngineCore() = default;
     EngineCore::~EngineCore() = default;
 
-    GLFWwindow *EngineCore::GetWindowPtr() const { return window.GetWindowPtr(); }
     VulkanEngine *EngineCore::GetVulkanEnginePtr() { return &VulkanEngine; }
 
     void EngineCore::StartEngineCore() {
@@ -54,10 +53,11 @@ namespace EngineCore {
                 println(std::cout, "Initialized GLFW");
                 glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
                 window.InitWindow();
+                windowPtr = window.window;
                 println(std::cout, "------------Finished-Window-Creation------------");
                 println(std::cout, "--------------Starting-Vulkan-Base--------------");
-                VulkanEngine.InitVulkanEngine();
-                println(std::cout, "--------------Finished-Vulkan-Base--------------");
+                VulkanEngine.InitVulkanEngine(this);
+                println(std::cout, "-------------Finished-Vulkan-Engine-------------");
             }
             catch (const vk::SystemError &err) {
                 std::println(std::cerr, "Vulkan system error: {}", err.what());
@@ -79,6 +79,7 @@ namespace EngineCore {
             println(std::cout, "Initialized GLFW");
             glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
             window.InitWindow();
+            windowPtr = window.window;
             println(std::cout, "------------Finished-Window-Creation------------");
             println(std::cout, "------------Starting-OpenGL-Creation------------");
             // TODO: Create OpenGL Stuff
