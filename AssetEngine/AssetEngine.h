@@ -17,7 +17,7 @@ inline void LoaderCheck(const bool result, const char *message,
         throw std::runtime_error("Failed Load Packages");
     }
 }
-namespace Resources {
+namespace Assets {
     enum AssetType : uint8_t {
         Texture,
         Model,
@@ -52,10 +52,10 @@ namespace Resources {
         std::filesystem::path path;
     };
 
-    class Loader {
+    class AssetEngine {
     public:
-        Loader();
-        ~Loader();
+        AssetEngine();
+        ~AssetEngine();
 
         void InitLoader();
 
@@ -66,4 +66,4 @@ namespace Resources {
         std::list<Package> loadedPackages;
         std::vector<PackageReference> packageReferences;
     };
-} // namespace Resources
+} // namespace Assets

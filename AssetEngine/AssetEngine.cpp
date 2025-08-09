@@ -3,7 +3,7 @@
 #include <fstream>
 #include <windows.h>
 
-#include "Loader.h"
+#include "AssetEngine.h"
 
 namespace {
     template<typename t>
@@ -24,11 +24,11 @@ namespace {
     }
 } // namespace
 
-namespace Resources {
-    Loader::Loader() = default;
-    Loader::~Loader() = default;
+namespace Assets {
+    AssetEngine::AssetEngine() = default;
+    AssetEngine::~AssetEngine() = default;
 
-    void Loader::InitLoader() {
+    void AssetEngine::InitLoader() {
         std::array<char, MAX_PATH> path{};
         const DWORD length =
                 GetModuleFileNameA(nullptr, path.data(), static_cast<DWORD>(path.size()));
@@ -51,7 +51,7 @@ namespace Resources {
         }
     }
 
-    Package *Loader::LoadPackage(const char *package_name) {
+    Package *AssetEngine::LoadPackage(const char *package_name) {
         std::println(std::cout, "Loading Package: {}", package_name);
 
         for (const auto &[pack_name, pack_path]: packageReferences) {
@@ -91,7 +91,7 @@ namespace Resources {
         return &loadedPackages.back();
     }
 
-    void Loader::UnloadPackage(Package *&package) {
+    void AssetEngine::UnloadPackage(Package *&package) {
         if (!package)
             return;
 
@@ -112,4 +112,4 @@ namespace Resources {
         return nullptr;
     }
 
-} // namespace Resources
+} // namespace Assets

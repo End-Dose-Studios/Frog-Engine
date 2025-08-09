@@ -47,8 +47,8 @@ add_executable(FrogEngine Assets/App.rc
         EngineCore/VulkanEngine/QueueFamilies.cpp
         EngineCore/VulkanEngine/Surface.cpp
         EngineCore/VulkanEngine/LogicalDevice.cpp
-        Loader/Loader.cpp
-        Loader/Loader.h
+        AssetEngine/AssetEngine.cpp
+        AssetEngine/AssetEngine.h
         GraphicsEngine/GraphicsEngine.cpp
         GraphicsEngine/GraphicsEngine.h
 )

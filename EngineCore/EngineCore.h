@@ -24,6 +24,6 @@ namespace EngineCore {
     private:
         Window window;
 
-        VulkanEngine VulkanEngine;
+        VulkanEngine vulkanEngine;
     };
 } // namespace EngineCore

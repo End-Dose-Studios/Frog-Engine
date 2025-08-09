@@ -5,9 +5,9 @@
 
 #include <GLFW/glfw3.h>
 
+#include "AssetEngine/AssetEngine.h"
 #include "EngineCore/EngineCore.h"
 #include "GraphicsEngine/GraphicsEngine.h"
-#include "Loader/Loader.h"
 
 int main() {
 #ifdef NDEBUG
@@ -24,10 +24,10 @@ int main() {
     graphics_engine.StartGraphicsEngine();
 
     // TODO Create Asset Manager
-    Resources::Loader loader;
-    loader.InitLoader();
-    Resources::Package *global_pack = loader.LoadPackage("Global");
-    loader.UnloadPackage(global_pack);
+    Assets::AssetEngine asset_engine;
+    asset_engine.InitLoader();
+    Assets::Package *global_pack = asset_engine.LoadPackage("Global");
+    asset_engine.UnloadPackage(global_pack);
 
     // TODO Relocate To Engine Core
     while (!glfwWindowShouldClose(window)) {
