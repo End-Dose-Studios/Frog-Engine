@@ -1,11 +1,11 @@
 #include <iostream>
 
-#include "../EngineCore/EngineCore.h"
-#include "GraphicsEngine.h"
+#include <FrogEngine.h>
+#include <GraphicsEngine.h>
 
 namespace Graphics {
     void GraphicsEngine::CreateSwapchainImages() {
-        swapchainImages = engineCorePtr->vkDevice.getSwapchainImagesKHR(vkSwapchain);
+        swapchainImages = frogEnginePtr->vulkan.vkDevice.getSwapchainImagesKHR(vkSwapchain);
 
         for (const auto &image: swapchainImages) {
             vk::ImageViewCreateInfo image_view_info{};
@@ -29,14 +29,14 @@ namespace Graphics {
             image_view_info.subresourceRange = subresource_range;
 
             swapchainImageViews.emplace_back(
-                    engineCorePtr->vkDevice.createImageView(image_view_info));
+                    frogEnginePtr->vulkan.vkDevice.createImageView(image_view_info));
             std::println(std::cout, "--------Image-View-Created--------");
         }
     }
 
     void GraphicsEngine::DestroySwapchainImages() const {
         for (const auto &image_view: swapchainImageViews) {
-            engineCorePtr->vkDevice.destroyImageView(image_view);
+            frogEnginePtr->vulkan.vkDevice.destroyImageView(image_view);
             std::println(std::cout, "-------Image-View-Destroyed-------");
         }
     }

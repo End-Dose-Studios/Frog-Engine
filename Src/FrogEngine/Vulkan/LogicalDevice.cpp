@@ -2,10 +2,10 @@
 #include <set>
 #include <vector>
 
-#include "EngineCore.h"
+#include <Vulkan.h>
 
-namespace EngineCore {
-    void EngineCore::CreateLogicalDevice() {
+namespace FrogEngine {
+    void Vulkan::CreateLogicalDevice() {
         std::set const queue_indices{queueIndices.graphicsFamily, queueIndices.presentFamily,
                                      queueIndices.computeFamily, queueIndices.transferFamily};
 
@@ -39,7 +39,7 @@ namespace EngineCore {
         device_info.pEnabledFeatures = &device_features;
 
         vkDevice = selectedDevice->createDevice(device_info);
-        println(std::cout, "------Logical-Device-Created------");
+        std::println(std::cout, "------Logical-Device-Created------");
 
 
         vkGraphicsQueue = vkDevice.getQueue(queueIndices.graphicsFamily, 0);
@@ -48,9 +48,9 @@ namespace EngineCore {
         vkGraphicsQueue = vkDevice.getQueue(queueIndices.computeFamily, 0);
     }
 
-    void EngineCore::DestroyLogicalDevice() const {
+    void Vulkan::DestroyLogicalDevice() const {
         vkDevice.destroy();
-        println(std::cout, "-----Logical-Device-Destroyed-----");
+        std::println(std::cout, "-----Logical-Device-Destroyed-----");
     }
 
-} // namespace EngineCore
+} // namespace FrogEngine

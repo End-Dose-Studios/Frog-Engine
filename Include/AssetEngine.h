@@ -7,8 +7,8 @@
 
 #include <vulkan/vulkan.hpp>
 
-namespace EngineCore {
-    class EngineCore;
+namespace FrogEngine {
+    class FrogEngine;
 }
 namespace Assets {
 
@@ -60,10 +60,10 @@ namespace Assets {
 
     class AssetEngine {
     public:
-        explicit AssetEngine(const EngineCore::EngineCore *engine_core_ptr);
+        explicit AssetEngine(const FrogEngine::FrogEngine *frog_engine_ptr);
         ~AssetEngine();
 
-        void InitLoader();
+        void StartAssetLoader();
 
         Package *LoadPackage(const char *package_name);
         void UnloadPackage(Package *&package);

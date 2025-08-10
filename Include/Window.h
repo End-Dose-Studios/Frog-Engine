@@ -4,7 +4,7 @@ struct GLFWwindow;
 struct GLFWmonitor;
 struct GLFWvidmode;
 
-namespace EngineCore {
+namespace FrogEngine {
     class Window {
     public:
         Window();
@@ -27,4 +27,4 @@ namespace EngineCore {
         int posY{};
         bool fullscreen{false};
     };
-} // namespace EngineCore
+} // namespace FrogEngine

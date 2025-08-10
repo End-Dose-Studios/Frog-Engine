@@ -1,19 +1,19 @@
 #include <iostream>
 
-#include "EngineCore.h"
+#include <Vulkan.h>
 
-namespace EngineCore {
-    void EngineCore::GetQueueFamilyIndices() {
-        println(std::cout, "------Getting-Queue-Families------");
+namespace FrogEngine {
+    void Vulkan::GetQueueFamilyIndices() {
+        std::println(std::cout, "------Getting-Queue-Families------");
 
         const auto queue_families = selectedDevice->getQueueFamilyProperties();
 
-        println(std::cout, "Queue Families: {}", queue_families.size());
+        std::println(std::cout, "Queue Families: {}", queue_families.size());
 
         for (int i = 0; i < queue_families.size(); i++) {
             const vk::QueueFamilyProperties family = queue_families[i];
 
-            println(std::cout, "  Queue Family: {}, Count: {}", i, family.queueCount);
+            std::println(std::cout, "  Queue Family: {}, Count: {}", i, family.queueCount);
 
             if ((family.queueFlags & vk::QueueFlagBits::eGraphics) && !queueIndices.IsComplete()) {
                 queueIndices.graphicsFamily = i;
@@ -56,4 +56,4 @@ namespace EngineCore {
         std::println(std::cout, "  Transfer: {}", queueIndices.transferFamily);
         std::println(std::cout, "  Compute: {}", queueIndices.computeFamily);
     }
-} // namespace EngineCore
+} // namespace FrogEngine

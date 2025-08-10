@@ -2,9 +2,9 @@
 
 #include <GLFW/glfw3.h>
 
-#include "Window.h"
+#include "../../../Include/Window.h"
 
-namespace EngineCore {
+namespace FrogEngine {
     Window::Window() = default;
     Window::~Window() {
         glfwDestroyWindow(window);
@@ -14,7 +14,7 @@ namespace EngineCore {
     void Window::InitWindow() {
         if (window) {
             glfwDestroyWindow(window);
-            println(std::cout, "Destroyed Previous Window");
+            std::println(std::cout, "Destroyed Previous Window");
         }
 
         monitor = glfwGetPrimaryMonitor();
@@ -26,7 +26,7 @@ namespace EngineCore {
         }
         glfwMakeContextCurrent(window);
         glfwGetWindowPos(window, &posX, &posY);
-        println(std::cout, "Created Window\n  Size: (640 x 480)\n  TItle: Frog Engine");
+        std::println(std::cout, "Created Window\n  Size: (640 x 480)\n  TItle: Frog Engine");
     }
 
     void Window::SetFullscreen(const bool new_fullscreen) {
@@ -45,4 +45,4 @@ namespace EngineCore {
 
     bool Window::GetFullscreen() const { return fullscreen; }
 
-} // namespace EngineCore
+} // namespace FrogEngine

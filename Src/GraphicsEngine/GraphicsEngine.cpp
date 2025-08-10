@@ -1,17 +1,17 @@
 #include <iostream>
 
-#include "../EngineCore/EngineCore.h"
-#include "GraphicsEngine.h"
+#include <FrogEngine.h>
+#include <GraphicsEngine.h>
 
 namespace Graphics {
-    GraphicsEngine::GraphicsEngine(EngineCore::EngineCore *engine_core_ptr) {
-        engineCorePtr = engine_core_ptr;
-        windowPtr = engine_core_ptr->window.window;
+    GraphicsEngine::GraphicsEngine(FrogEngine::FrogEngine *frog_engine_ptr) {
+        frogEnginePtr = frog_engine_ptr;
+        windowPtr = frog_engine_ptr->window.window;
     };
 
     GraphicsEngine::~GraphicsEngine() {
         DestroySwapchainImages();
-        DestroySwapChain();
+        DestroySwapchain();
     }
 
     void GraphicsEngine::StartGraphicsEngine() {

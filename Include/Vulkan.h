@@ -1,10 +1,9 @@
 #pragma once
 
-#include "Window/Window.h"
-
 #include <vulkan/vulkan.hpp>
 
-namespace EngineCore {
+namespace FrogEngine {
+    class FrogEngine;
 
     struct QueueFamilyIndices {
         uint32_t graphicsFamily{UINT32_MAX};
@@ -26,12 +25,12 @@ namespace EngineCore {
         }
     };
 
-    class EngineCore {
+    class Vulkan {
     public:
-        EngineCore();
-        ~EngineCore();
+        explicit Vulkan(FrogEngine *frog_engine_ptr);
+        ~Vulkan();
 
-        void StartEngineCore();
+        void StartVulkan();
 
 #ifndef NDEBUG
         bool enableDebugExtensions{true};
@@ -39,12 +38,12 @@ namespace EngineCore {
         bool enableDebugExtensions{false};
 #endif
 
-        Window window;
-
         vk::PhysicalDevice *selectedDevice{nullptr};
         vk::SurfaceKHR vkSurface;
         QueueFamilyIndices queueIndices;
         vk::Device vkDevice;
+
+        FrogEngine *frogEnginePtr;
 
     private:
         void CreateInstance();
@@ -70,4 +69,4 @@ namespace EngineCore {
         vk::Queue vkTransferQueue;
         vk::Queue vkComputeQueue;
     };
-} // namespace EngineCore
+} // namespace FrogEngine

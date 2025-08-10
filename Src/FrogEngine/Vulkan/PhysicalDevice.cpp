@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "EngineCore.h"
+#include <Vulkan.h>
 
 namespace {
     int checkExtensionSupport(const vk::PhysicalDevice *device) {
@@ -50,10 +50,10 @@ namespace {
 
         const auto device_features = device->getFeatures();
 
-        println(std::cout, "  Geometry Shader: {}",
-                static_cast<bool>(device_features.geometryShader));
-        println(std::cout, "  Tessellation Shader: {}",
-                static_cast<bool>(device_features.tessellationShader));
+        std::println(std::cout, "  Geometry Shader: {}",
+                     static_cast<bool>(device_features.geometryShader));
+        std::println(std::cout, "  Tessellation Shader: {}",
+                     static_cast<bool>(device_features.tessellationShader));
 
         constexpr uint32_t SHADER_SUPPORT_WEIGHT{500};
         score += SHADER_SUPPORT_WEIGHT *
@@ -75,7 +75,7 @@ namespace {
 
         constexpr uint64_t BYTES_TO_GIGABYTES{1048576};
         const float v_ram_gb = static_cast<float>(v_ram) / static_cast<float>(BYTES_TO_GIGABYTES);
-        println(std::cout, "  VRAM: {} Mb", static_cast<int>(v_ram_gb + 0.5)); // NOLINT
+        std::println(std::cout, "  VRAM: {} Mb", static_cast<int>(v_ram_gb + 0.5)); // NOLINT
 
         constexpr uint64_t VRAM_WEIGHT{20};
         score += static_cast<uint32_t>(
@@ -93,14 +93,14 @@ namespace {
         score += getFeatures(device);
         score += getMemoryProperties(device);
 
-        println(std::cout, "  Score: {}", score);
+        std::println(std::cout, "  Score: {}", score);
         return score;
     }
 } // namespace
 
-namespace EngineCore {
-    void EngineCore::GetPhysicalDevices() {
-        println(std::cout, "----Finding-All-Engine-Devices----");
+namespace FrogEngine {
+    void Vulkan::GetPhysicalDevices() {
+        std::println(std::cout, "----Finding-All-Engine-Devices----");
 
         const std::vector<vk::PhysicalDevice> devices = vkInstance.enumeratePhysicalDevices();
 
@@ -121,4 +121,4 @@ namespace EngineCore {
                      selectedDevice->getProperties().deviceName.data());
     }
 
-} // namespace EngineCore
+} // namespace FrogEngine

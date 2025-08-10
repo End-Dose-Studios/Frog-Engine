@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "EngineCore.h"
+#include <Vulkan.h>
 
 namespace {
     const char *getSeverity(const vk::DebugUtilsMessageSeverityFlagBitsEXT severity) {
@@ -44,9 +44,9 @@ namespace {
     }
 } // namespace
 
-namespace EngineCore {
+namespace FrogEngine {
 
-    void EngineCore::CreateDebugMessenger() {
+    void Vulkan::CreateDebugMessenger() {
         if (!enableDebugExtensions)
             return;
 
@@ -60,23 +60,23 @@ namespace EngineCore {
         debug_messenger_info.pfnUserCallback = debugCallback;
         debug_messenger_info.pUserData = nullptr;
 
-        if (const vk::detail::DispatchLoaderDynamic instanceLoader(vkInstance,
-                                                                   vkGetInstanceProcAddr);
+        if (const vk::detail::DispatchLoaderDynamic instance_loader(vkInstance,
+                                                                    vkGetInstanceProcAddr);
             vkInstance.createDebugUtilsMessengerEXT(&debug_messenger_info, nullptr,
                                                     &vkDebugMessenger,
-                                                    instanceLoader) != vk::Result::eSuccess) {
+                                                    instance_loader) != vk::Result::eSuccess) {
             throw std::runtime_error("Failed to create debug messenger");
         };
-        println(std::cout, "-----Debug-Messenger-Created------");
+        std::println(std::cout, "-----Debug-Messenger-Created------");
     }
 
-    void EngineCore::DestroyDebugMessenger() const {
+    void Vulkan::DestroyDebugMessenger() const {
         if (!enableDebugExtensions)
             return;
 
-        const vk::detail::DispatchLoaderDynamic instanceLoader(vkInstance, vkGetInstanceProcAddr);
-        vkInstance.destroyDebugUtilsMessengerEXT(vkDebugMessenger, nullptr, instanceLoader);
-        println(std::cout, "-----Debug-Messenger-Destroyed----");
+        const vk::detail::DispatchLoaderDynamic instance_loader(vkInstance, vkGetInstanceProcAddr);
+        vkInstance.destroyDebugUtilsMessengerEXT(vkDebugMessenger, nullptr, instance_loader);
+        std::println(std::cout, "-----Debug-Messenger-Destroyed----");
     }
 
-} // namespace EngineCore
+} // namespace FrogEngine

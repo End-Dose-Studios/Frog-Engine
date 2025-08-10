@@ -2,8 +2,8 @@
 
 #include <GLFW/glfw3.h>
 
-#include "../EngineCore/EngineCore.h"
-#include "GraphicsEngine.h"
+#include <FrogEngine.h>
+#include <GraphicsEngine.h>
 
 namespace {
     Graphics::SwapchainDetails getSwapChainDetails(const vk::PhysicalDevice *device,
@@ -91,15 +91,15 @@ namespace {
 
 namespace Graphics {
     void GraphicsEngine::CreateSwapchain() {
-        swapchainDetails =
-                getSwapChainDetails(engineCorePtr->selectedDevice, &engineCorePtr->vkSurface);
+        swapchainDetails = getSwapChainDetails(frogEnginePtr->vulkan.selectedDevice,
+                                               &frogEnginePtr->vulkan.vkSurface);
 
         swapchainSurfaceFormat = getFormat(&swapchainDetails).format;
         swapchainPresentMode = getPresent(&swapchainDetails);
         swapchainExtent = getExtent(&swapchainDetails, windowPtr);
 
         vk::SwapchainCreateInfoKHR swapchain_info{};
-        swapchain_info.surface = engineCorePtr->vkSurface;
+        swapchain_info.surface = frogEnginePtr->vulkan.vkSurface;
         swapchain_info.minImageCount = getImageCount(&swapchainDetails);
         swapchain_info.imageFormat = swapchainSurfaceFormat.format;
         swapchain_info.imageColorSpace = swapchainSurfaceFormat.colorSpace;
@@ -107,7 +107,7 @@ namespace Graphics {
         swapchain_info.imageArrayLayers = 1;
         swapchain_info.imageUsage = vk::ImageUsageFlagBits::eColorAttachment;
 
-        const EngineCore::QueueFamilyIndices *queue_indices = &engineCorePtr->queueIndices;
+        const FrogEngine::QueueFamilyIndices *queue_indices = &frogEnginePtr->vulkan.queueIndices;
 
         const std::array<uint32_t, 2> queue_family_indices = {queue_indices->graphicsFamily,
                                                               queue_indices->presentFamily};
@@ -127,12 +127,12 @@ namespace Graphics {
         swapchain_info.clipped = vk::True;
         swapchain_info.oldSwapchain = nullptr;
 
-        vkSwapchain = engineCorePtr->vkDevice.createSwapchainKHR(swapchain_info);
+        vkSwapchain = frogEnginePtr->vulkan.vkDevice.createSwapchainKHR(swapchain_info);
         std::println(std::cout, "---------Swapchain-Created--------");
     }
 
     void GraphicsEngine::DestroySwapchain() const {
-        engineCorePtr->vkDevice.destroySwapchainKHR(vkSwapchain);
+        frogEnginePtr->vulkan.vkDevice.destroySwapchainKHR(vkSwapchain);
         std::println(std::cout, "-------Swapchain-Destroyed--------");
     }
 

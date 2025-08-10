@@ -3,9 +3,9 @@
 #include <vulkan/vulkan.hpp>
 
 struct GLFWwindow;
-namespace EngineCore {
-    class EngineCore;
-} // namespace EngineCore
+namespace FrogEngine {
+    class FrogEngine;
+} // namespace FrogEngine
 
 namespace Graphics {
     struct SwapchainDetails {
@@ -16,20 +16,20 @@ namespace Graphics {
 
     class GraphicsEngine {
     public:
-        explicit GraphicsEngine(EngineCore::EngineCore *engine_core_ptr);
+        explicit GraphicsEngine(FrogEngine::FrogEngine *frog_engine_ptr);
         ~GraphicsEngine();
 
         void StartGraphicsEngine();
 
     private:
-        EngineCore::EngineCore *engineCorePtr{nullptr};
+        FrogEngine::FrogEngine *frogEnginePtr{nullptr};
         GLFWwindow *windowPtr{nullptr};
 
         void CreateSwapchain();
         void DestroySwapchain() const;
         vk::SwapchainKHR vkSwapchain;
         vk::SurfaceFormatKHR swapchainSurfaceFormat;
-        vk::PresentModeKHR swapchainPresentMode;
+        vk::PresentModeKHR swapchainPresentMode{};
         vk::Extent2D swapchainExtent;
         SwapchainDetails swapchainDetails;
 

@@ -3,9 +3,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "AssetEngine.h"
-
-#include "../EngineCore/EngineCore.h"
+#include <AssetEngine.h>
+#include <FrogEngine.h>
 
 namespace {
     template<typename t>
@@ -69,12 +68,12 @@ namespace Assets {
         return nullptr;
     }
 
-    AssetEngine::AssetEngine(const EngineCore::EngineCore *engine_core_ptr) {
-        devicePtr = &engine_core_ptr->vkDevice;
+    AssetEngine::AssetEngine(const FrogEngine::FrogEngine *frog_engine_ptr) {
+        devicePtr = &frog_engine_ptr->vulkan.vkDevice;
     };
     AssetEngine::~AssetEngine() = default;
 
-    void AssetEngine::InitLoader() {
+    void AssetEngine::StartAssetLoader() {
         std::println(std::cout, "-------------Starting-Asset-Engine-------------");
 
         std::array<char, MAX_PATH> path{};
@@ -90,13 +89,13 @@ namespace Assets {
         if (!exists(package_directory)) {
             throw std::runtime_error("Could not find packages directory");
         }
-        println(std::cout, "Found: {}", package_directory.string());
+        std::println(std::cout, "Found: {}", package_directory.string());
 
         for (const auto &package: std::filesystem::directory_iterator(package_directory)) {
             if (!is_regular_file(package))
                 continue;
 
-            println(std::cout, "  {}", package.path().string());
+            std::println(std::cout, "  {}", package.path().string());
 
             PackageReference package_reference;
             package_reference.name = package.path().stem().string();
@@ -104,7 +103,7 @@ namespace Assets {
 
             packageReferences.emplace_back(package_reference);
         }
-        println(std::cout, "----------Packages-Found----------");
+        std::println(std::cout, "----------Packages-Found----------");
         std::println(std::cout, "-------------Finished-Asset-Engine--------------\n");
     }
 
@@ -143,7 +142,7 @@ namespace Assets {
             break;
         }
 
-        println(std::cout, "-------Loaded {}-------", package_name);
+        std::println(std::cout, "-------Loaded {}-------", package_name);
 
         return &loadedPackages.back();
     }
@@ -165,7 +164,7 @@ namespace Assets {
         if (target_package != loadedPackages.end())
             loadedPackages.erase(target_package);
 
-        println(std::cout, "------Unloaded {}------\n", pack_name);
+        std::println(std::cout, "------Unloaded {}------\n", pack_name);
 
         package = nullptr;
     }

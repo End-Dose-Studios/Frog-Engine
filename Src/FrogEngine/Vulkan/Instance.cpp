@@ -2,7 +2,7 @@
 
 #include <GLFW/glfw3.h>
 
-#include "EngineCore.h"
+#include <Vulkan.h>
 
 namespace {
     uint32_t getAPIVersion() {
@@ -37,9 +37,9 @@ namespace {
             throw std::runtime_error("Missing required extensions.");
         }
 
-        println(std::cout, "Instance Extensions:");
+        std::println(std::cout, "Instance Extensions:");
         for (const auto extension: extensions) {
-            println(std::cout, "  {}", extension);
+            std::println(std::cout, "  {}", extension);
         }
 
         return extensions;
@@ -62,17 +62,17 @@ namespace {
             throw std::runtime_error("Missing required layers.");
         }
 
-        println(std::cout, "Instance Layers:");
+        std::println(std::cout, "Instance Layers:");
         for (const auto layer: layers) {
-            println(std::cout, "  {}", layer);
+            std::println(std::cout, "  {}", layer);
         }
 
         return layers;
     }
 } // namespace
 
-namespace EngineCore {
-    void EngineCore::CreateInstance() {
+namespace FrogEngine {
+    void Vulkan::CreateInstance() {
         vk::ApplicationInfo app_info;
         app_info.pApplicationName = "FrogEngine";
         app_info.applicationVersion = vk::makeApiVersion(0, 1, 0, 0);
@@ -92,11 +92,11 @@ namespace EngineCore {
         instance_info.ppEnabledExtensionNames = extensions.data();
 
         vkInstance = vk::createInstance(instance_info);
-        println(std::cout, "---------Instance-Created---------");
+        std::println(std::cout, "---------Instance-Created---------");
     }
 
-    void EngineCore::DestroyInstance() const {
+    void Vulkan::DestroyInstance() const {
         vkInstance.destroy();
-        println(std::cout, "--------Instance Destroyed--------");
+        std::println(std::cout, "--------Instance Destroyed--------");
     }
-} // namespace EngineCore
+} // namespace FrogEngine
