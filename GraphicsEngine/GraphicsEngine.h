@@ -26,7 +26,7 @@ namespace Graphics {
         GLFWwindow *windowPtr{nullptr};
 
         void CreateSwapchain();
-        void DestroySwapChain() const;
+        void DestroySwapchain() const;
         vk::SwapchainKHR vkSwapchain;
         vk::SurfaceFormatKHR swapchainSurfaceFormat;
         vk::PresentModeKHR swapchainPresentMode;

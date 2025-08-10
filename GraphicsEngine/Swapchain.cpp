@@ -131,7 +131,7 @@ namespace Graphics {
         std::println(std::cout, "---------Swapchain-Created--------");
     }
 
-    void GraphicsEngine::DestroySwapChain() const {
+    void GraphicsEngine::DestroySwapchain() const {
         engineCorePtr->vkDevice.destroySwapchainKHR(vkSwapchain);
         std::println(std::cout, "-------Swapchain-Destroyed--------");
     }
