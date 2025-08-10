@@ -2,10 +2,10 @@
 #include <set>
 #include <vector>
 
-#include "VulkanEngine.h"
+#include "EngineCore.h"
 
-namespace EngineCore::Vulkan {
-    void Engine::CreateLogicalDevice() {
+namespace EngineCore {
+    void EngineCore::CreateLogicalDevice() {
         std::set const queue_indices{queueIndices.graphicsFamily, queueIndices.presentFamily,
                                      queueIndices.computeFamily, queueIndices.transferFamily};
 
@@ -48,11 +48,9 @@ namespace EngineCore::Vulkan {
         vkGraphicsQueue = vkDevice.getQueue(queueIndices.computeFamily, 0);
     }
 
-    void Engine::DestroyLogicalDevice() const {
+    void EngineCore::DestroyLogicalDevice() const {
         vkDevice.destroy();
         println(std::cout, "-----Logical-Device-Destroyed-----");
     }
 
-    const vk::Device *Engine::GetDevicePtr() const { return &vkDevice; }
-
-} // namespace EngineCore::Vulkan
+} // namespace EngineCore

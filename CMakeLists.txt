@@ -39,30 +39,19 @@ add_executable(FrogEngine Assets/App.rc
         EngineCore/EngineCore.h
         EngineCore/Window/Window.cpp
         EngineCore/Window/Window.h
-        EngineCore/VulkanEngine/VulkanEngine.cpp
-        EngineCore/VulkanEngine/VulkanEngine.h
-        EngineCore/VulkanEngine/Instance.cpp
-        EngineCore/VulkanEngine/DebugMessenger.cpp
-        EngineCore/VulkanEngine/PhysicalDevice.cpp
-        EngineCore/VulkanEngine/QueueFamilies.cpp
-        EngineCore/VulkanEngine/Surface.cpp
-        EngineCore/VulkanEngine/LogicalDevice.cpp
+        EngineCore/Instance.cpp
+        EngineCore/DebugMessenger.cpp
+        EngineCore/PhysicalDevice.cpp
+        EngineCore/QueueFamilies.cpp
+        EngineCore/Surface.cpp
+        EngineCore/LogicalDevice.cpp
         AssetEngine/AssetEngine.cpp
         AssetEngine/AssetEngine.h
         GraphicsEngine/GraphicsEngine.cpp
         GraphicsEngine/GraphicsEngine.h
-        GraphicsEngine/VulkanGraphics/VulkanGraphics.cpp
-        GraphicsEngine/VulkanGraphics/VulkanGraphics.h
-        GraphicsEngine/VulkanGraphics/Swapchain.cpp
-        GraphicsEngine/VulkanGraphics/SwapchainImages.cpp
-        AssetEngine/VulkanAssets/VulkanAssets.cpp
-        AssetEngine/VulkanAssets/VulkanAssets.h
-        AssetEngine/Package.cpp
-        AssetEngine/Package.h
-        AssetEngine/Asset.cpp
-        AssetEngine/Asset.h
-        AssetEngine/Package.cpp
-        AssetEngine/Package.h
+        GraphicsEngine/Swapchain.cpp
+        GraphicsEngine/SwapchainImages.cpp
+        AssetEngine/AssetCreator.cpp
 )
 
 #Attach GLFW Include to Project

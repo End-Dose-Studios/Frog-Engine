@@ -3,9 +3,9 @@
 #include <fstream>
 #include <iostream>
 
-#include "../EngineCore/EngineCore.h"
 #include "AssetEngine.h"
-#include "VulkanAssets/VulkanAssets.h"
+
+#include "../EngineCore/EngineCore.h"
 
 namespace {
     template<typename t>
@@ -27,15 +27,50 @@ namespace {
 } // namespace
 
 namespace Assets {
-    AssetEngine::AssetEngine(EngineCore::EngineCore *engine_core_ptr) {
-        engineCorePtr = engine_core_ptr;
-        if (engineCorePtr->selectedAPI == GraphicsAPI::Vulkan) {
-            createShader = &Vulkan::CreateShader;
-            destroyShader = &Vulkan::DestroyShader;
+    void *GetHandlePtr(APIHandle handle) {
+        return std::visit(
+                []<typename t0>(const t0 &arg) -> void *
+                {
+                    using T = std::decay_t<t0>;
+                    if constexpr (std::is_same_v<T, std::monostate>)
+                        return nullptr;
+                    else
+                        return static_cast<void *>(const_cast<std::remove_const_t<T> *>(&arg));
+                },
+                handle);
+    }
+
+    void Asset::CreateHandle() {
+        switch (type) {
+            case AssetType::Shader:
+                CreateShader();
+                break;
+            default:
+                break;
         }
-        if (engineCorePtr->selectedAPI == GraphicsAPI::OpenGL) {
-            // TODO
+    }
+
+    void Asset::DestroyHandle() {
+        switch (type) {
+            case AssetType::Shader:
+                DestroyShader();
+                break;
+            default:
+                break;
         }
+    }
+
+    void *Package::QueryAssets(AssetType type, const std::string &name) {
+        if (const auto asset = assetMap.find({type, name}); asset != assetMap.end()) {
+            if (GetHandlePtr(asset->second->handle) == nullptr)
+                asset->second->CreateHandle();
+            return GetHandlePtr(asset->second->handle);
+        }
+        return nullptr;
+    }
+
+    AssetEngine::AssetEngine(const EngineCore::EngineCore *engine_core_ptr) {
+        devicePtr = &engine_core_ptr->vkDevice;
     };
     AssetEngine::~AssetEngine() = default;
 
@@ -102,12 +137,7 @@ namespace Assets {
                 readUInt(file, asset.size);
                 readBytes(file, asset.data, asset.size);
 
-                asset.engineCorePtr = engineCorePtr;
-                asset.assetEnginePtr = this;
                 package->assets.emplace_back(asset);
-
-                Asset *test = &package->assets.back();
-
                 package->assetMap[{asset.type, asset.name}] = &package->assets.back();
             }
             break;
@@ -125,7 +155,7 @@ namespace Assets {
         const auto target_package = std::ranges::find_if(
                 loadedPackages, [&](const Package &pack) { return &pack == package; });
 
-        for (const auto &asset: package->assets) {
+        for (auto &asset: package->assets) {
             if (GetHandlePtr(asset.handle) != nullptr)
                 asset.DestroyHandle();
         }

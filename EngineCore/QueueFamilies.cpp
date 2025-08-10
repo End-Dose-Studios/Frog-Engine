@@ -1,9 +1,9 @@
 #include <iostream>
 
-#include "VulkanEngine.h"
+#include "EngineCore.h"
 
-namespace EngineCore::Vulkan {
-    void Engine::GetQueueFamilyIndices() {
+namespace EngineCore {
+    void EngineCore::GetQueueFamilyIndices() {
         println(std::cout, "------Getting-Queue-Families------");
 
         const auto queue_families = selectedDevice->getQueueFamilyProperties();
@@ -56,7 +56,4 @@ namespace EngineCore::Vulkan {
         std::println(std::cout, "  Transfer: {}", queueIndices.transferFamily);
         std::println(std::cout, "  Compute: {}", queueIndices.computeFamily);
     }
-
-    const QueueFamilyIndices *Engine::GetQueueFamilyIndicesPtr() const { return &queueIndices; }
-
-} // namespace EngineCore::Vulkan
+} // namespace EngineCore

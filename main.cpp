@@ -4,7 +4,6 @@
 #endif
 
 #include <GLFW/glfw3.h>
-#include <iostream>
 
 #include "AssetEngine/AssetEngine.h"
 #include "EngineCore/EngineCore.h"
@@ -19,7 +18,7 @@ int main() {
 
     EngineCore::EngineCore engine_core;
     engine_core.StartEngineCore();
-    GLFWwindow *window = engine_core.windowPtr;
+    GLFWwindow *window = engine_core.window.window;
 
     Graphics::GraphicsEngine graphics_engine(&engine_core);
     graphics_engine.StartGraphicsEngine();

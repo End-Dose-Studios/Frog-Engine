@@ -1,11 +1,11 @@
 #include <iostream>
 
-#include "../../EngineCore/VulkanEngine/VulkanEngine.h"
-#include "VulkanGraphics.h"
+#include "../EngineCore/EngineCore.h"
+#include "GraphicsEngine.h"
 
-namespace Graphics::Vulkan {
-    void Graphics::CreateSwapchainImages() {
-        swapchainImages = vulkanEnginePtr->GetDevicePtr()->getSwapchainImagesKHR(vkSwapchain);
+namespace Graphics {
+    void GraphicsEngine::CreateSwapchainImages() {
+        swapchainImages = engineCorePtr->vkDevice.getSwapchainImagesKHR(vkSwapchain);
 
         for (const auto &image: swapchainImages) {
             vk::ImageViewCreateInfo image_view_info{};
@@ -29,16 +29,16 @@ namespace Graphics::Vulkan {
             image_view_info.subresourceRange = subresource_range;
 
             swapchainImageViews.emplace_back(
-                    vulkanEnginePtr->GetDevicePtr()->createImageView(image_view_info));
+                    engineCorePtr->vkDevice.createImageView(image_view_info));
             std::println(std::cout, "--------Image-View-Created--------");
         }
     }
 
-    void Graphics::DestroySwapchainImages() const {
+    void GraphicsEngine::DestroySwapchainImages() const {
         for (const auto &image_view: swapchainImageViews) {
-            vulkanEnginePtr->GetDevicePtr()->destroyImageView(image_view);
+            engineCorePtr->vkDevice.destroyImageView(image_view);
             std::println(std::cout, "-------Image-View-Destroyed-------");
         }
     }
 
-} // namespace Graphics::Vulkan
+} // namespace Graphics

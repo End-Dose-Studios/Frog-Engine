@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "VulkanEngine.h"
+#include "EngineCore.h"
 
 namespace {
     int checkExtensionSupport(const vk::PhysicalDevice *device) {
@@ -98,8 +98,8 @@ namespace {
     }
 } // namespace
 
-namespace EngineCore::Vulkan {
-    void Engine::GetPhysicalDevices() {
+namespace EngineCore {
+    void EngineCore::GetPhysicalDevices() {
         println(std::cout, "----Finding-All-Engine-Devices----");
 
         const std::vector<vk::PhysicalDevice> devices = vkInstance.enumeratePhysicalDevices();
@@ -121,6 +121,4 @@ namespace EngineCore::Vulkan {
                      selectedDevice->getProperties().deviceName.data());
     }
 
-    vk::PhysicalDevice *Engine::GetPhysicalDevicePtr() const { return selectedDevice; }
-
-} // namespace EngineCore::Vulkan
+} // namespace EngineCore

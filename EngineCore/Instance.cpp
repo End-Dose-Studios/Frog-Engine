@@ -2,7 +2,7 @@
 
 #include <GLFW/glfw3.h>
 
-#include "VulkanEngine.h"
+#include "EngineCore.h"
 
 namespace {
     uint32_t getAPIVersion() {
@@ -71,8 +71,8 @@ namespace {
     }
 } // namespace
 
-namespace EngineCore::Vulkan {
-    void Engine::CreateInstance() {
+namespace EngineCore {
+    void EngineCore::CreateInstance() {
         vk::ApplicationInfo app_info;
         app_info.pApplicationName = "FrogEngine";
         app_info.applicationVersion = vk::makeApiVersion(0, 1, 0, 0);
@@ -95,13 +95,8 @@ namespace EngineCore::Vulkan {
         println(std::cout, "---------Instance-Created---------");
     }
 
-    void Engine::DestroyInstance() const {
+    void EngineCore::DestroyInstance() const {
         vkInstance.destroy();
         println(std::cout, "--------Instance Destroyed--------");
     }
-
-
-    vk::Instance *Engine::GetInstancePtr() { return &vkInstance; }
-
-
-} // namespace EngineCore::Vulkan
+} // namespace EngineCore

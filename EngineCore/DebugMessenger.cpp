@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "VulkanEngine.h"
+#include "EngineCore.h"
 
 namespace {
     const char *getSeverity(const vk::DebugUtilsMessageSeverityFlagBitsEXT severity) {
@@ -44,9 +44,9 @@ namespace {
     }
 } // namespace
 
-namespace EngineCore::Vulkan {
+namespace EngineCore {
 
-    void Engine::CreateDebugMessenger() {
+    void EngineCore::CreateDebugMessenger() {
         if (!enableDebugExtensions)
             return;
 
@@ -70,7 +70,7 @@ namespace EngineCore::Vulkan {
         println(std::cout, "-----Debug-Messenger-Created------");
     }
 
-    void Engine::DestroyDebugMessenger() const {
+    void EngineCore::DestroyDebugMessenger() const {
         if (!enableDebugExtensions)
             return;
 
@@ -79,4 +79,4 @@ namespace EngineCore::Vulkan {
         println(std::cout, "-----Debug-Messenger-Destroyed----");
     }
 
-} // namespace EngineCore::Vulkan
+} // namespace EngineCore
