@@ -39,9 +39,7 @@ namespace {
 namespace EngineCore {
     EngineCore::EngineCore() = default;
     EngineCore::~EngineCore() = default;
-
-    Vulkan::Engine *EngineCore::GetVulkanEnginePtr() { return &vulkanEngine; }
-
+    
     void EngineCore::StartEngineCore() {
         selectedAPI = detectAPI();
 

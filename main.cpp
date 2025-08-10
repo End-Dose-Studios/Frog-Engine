@@ -4,6 +4,7 @@
 #endif
 
 #include <GLFW/glfw3.h>
+#include <iostream>
 
 #include "AssetEngine/AssetEngine.h"
 #include "EngineCore/EngineCore.h"
@@ -26,7 +27,12 @@ int main() {
     // TODO Create Asset Manager
     Assets::AssetEngine asset_engine(&engine_core);
     asset_engine.InitLoader();
-    auto global_pack = asset_engine.LoadPackage("Global");
+    auto *global_pack = asset_engine.LoadPackage("Global");
+    auto *const vert =
+            static_cast<vk::ShaderModule *>(global_pack->QueryAssets(Assets::Shader, "main-vert"));
+
+    auto *const frag =
+            static_cast<vk::ShaderModule *>(global_pack->QueryAssets(Assets::Shader, "main-frag"));
 
     // TODO Relocate To Engine Core
     while (!glfwWindowShouldClose(window)) {
@@ -37,6 +43,5 @@ int main() {
     }
 
     asset_engine.UnloadPackage(global_pack);
-    println(std::cout, "\n-------------------Cleaning-Up------------------");
     return EXIT_SUCCESS;
 }

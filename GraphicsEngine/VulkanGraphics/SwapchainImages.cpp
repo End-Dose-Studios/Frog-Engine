@@ -30,14 +30,14 @@ namespace Graphics::Vulkan {
 
             swapchainImageViews.emplace_back(
                     vulkanEnginePtr->GetDevicePtr()->createImageView(image_view_info));
-            println(std::cout, "--------Image-View-Created--------");
+            std::println(std::cout, "--------Image-View-Created--------");
         }
     }
 
     void Graphics::DestroySwapchainImages() const {
         for (const auto &image_view: swapchainImageViews) {
             vulkanEnginePtr->GetDevicePtr()->destroyImageView(image_view);
-            println(std::cout, "-------Image-View-Destroyed-------");
+            std::println(std::cout, "-------Image-View-Destroyed-------");
         }
     }
 

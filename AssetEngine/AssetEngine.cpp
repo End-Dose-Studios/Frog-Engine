@@ -1,9 +1,11 @@
-#include <array>
+#include <Windows.h>
 #include <filesystem>
 #include <fstream>
-#include <windows.h>
+#include <iostream>
 
+#include "../EngineCore/EngineCore.h"
 #include "AssetEngine.h"
+#include "VulkanAssets/VulkanAssets.h"
 
 namespace {
     template<typename t>
@@ -27,11 +29,18 @@ namespace {
 namespace Assets {
     AssetEngine::AssetEngine(EngineCore::EngineCore *engine_core_ptr) {
         engineCorePtr = engine_core_ptr;
+        if (engineCorePtr->selectedAPI == GraphicsAPI::Vulkan) {
+            createShader = &Vulkan::CreateShader;
+            destroyShader = &Vulkan::DestroyShader;
+        }
+        if (engineCorePtr->selectedAPI == GraphicsAPI::OpenGL) {
+            // TODO
+        }
     };
     AssetEngine::~AssetEngine() = default;
 
     void AssetEngine::InitLoader() {
-        std::println(std::cout, "--------------Staring-Asset-Engine--------------");
+        std::println(std::cout, "-------------Starting-Asset-Engine-------------");
 
         std::array<char, MAX_PATH> path{};
         const DWORD length =
@@ -61,20 +70,17 @@ namespace Assets {
             packageReferences.emplace_back(package_reference);
         }
         println(std::cout, "----------Packages-Found----------");
-        std::println(std::cout, "-------------Finished-Asset-Engine--------------");
+        std::println(std::cout, "-------------Finished-Asset-Engine--------------\n");
     }
 
     Package *AssetEngine::LoadPackage(const char *package_name) {
-        std::println(std::cout, "Loading Package: {}", package_name);
-
         for (const auto &[pack_name, pack_path]: packageReferences) {
             if (pack_name != package_name)
                 continue;
 
-            loadedPackages.emplace_back();
-            auto &[name, assets, assetMap] = loadedPackages.back();
+            Package *package = &loadedPackages.emplace_back();
 
-            name = pack_name;
+            package->name = pack_name;
 
             std::ifstream file(pack_path, std::ios::binary);
             if (!file.is_open()) {
@@ -87,7 +93,7 @@ namespace Assets {
             readUInt(file, version);
             uint32_t asset_count{};
             readUInt(file, asset_count);
-            assets.reserve(asset_count);
+            package->assets.reserve(asset_count);
 
             for (uint32_t i = 0; i < asset_count; i++) {
                 Asset asset;
@@ -96,12 +102,18 @@ namespace Assets {
                 readUInt(file, asset.size);
                 readBytes(file, asset.data, asset.size);
 
-                assets.emplace_back(asset);
+                asset.engineCorePtr = engineCorePtr;
+                asset.assetEnginePtr = this;
+                package->assets.emplace_back(asset);
 
-                assetMap[{asset.type, asset.name}] = &assets.back();
+                Asset *test = &package->assets.back();
+
+                package->assetMap[{asset.type, asset.name}] = &package->assets.back();
             }
             break;
         }
+
+        println(std::cout, "-------Loaded {}-------", package_name);
 
         return &loadedPackages.back();
     }
@@ -113,18 +125,18 @@ namespace Assets {
         const auto target_package = std::ranges::find_if(
                 loadedPackages, [&](const Package &pack) { return &pack == package; });
 
-        if (target_package != loadedPackages.end()) {
-            loadedPackages.erase(target_package);
+        for (const auto &asset: package->assets) {
+            if (GetHandlePtr(asset.handle) != nullptr)
+                asset.DestroyHandle();
         }
+
+        std::string pack_name = package->name;
+
+        if (target_package != loadedPackages.end())
+            loadedPackages.erase(target_package);
+
+        println(std::cout, "------Unloaded {}------\n", pack_name);
 
         package = nullptr;
     }
-
-    Asset *Package::QueryAssets(AssetType type, const std::string &name) {
-        if (const auto asset = assetMap.find({type, name}); asset != assetMap.end()) {
-            return asset->second;
-        }
-        return nullptr;
-    }
-
 } // namespace Assets

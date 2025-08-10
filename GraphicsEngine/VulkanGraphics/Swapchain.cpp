@@ -9,18 +9,18 @@ namespace {
     Graphics::Vulkan::SwapchainDetails getSwapChainDetails(const vk::PhysicalDevice *device,
                                                            const vk::SurfaceKHR *surface) {
 
-        Graphics::Vulkan::SwapchainDetails swapchainDetails;
+        Graphics::Vulkan::SwapchainDetails swapchain_details;
 
-        swapchainDetails.capabilities = device->getSurfaceCapabilitiesKHR(*surface);
-        swapchainDetails.formats = device->getSurfaceFormatsKHR(*surface);
-        swapchainDetails.presentModes = device->getSurfacePresentModesKHR(*surface);
+        swapchain_details.capabilities = device->getSurfaceCapabilitiesKHR(*surface);
+        swapchain_details.formats = device->getSurfaceFormatsKHR(*surface);
+        swapchain_details.presentModes = device->getSurfacePresentModesKHR(*surface);
 
-        if (swapchainDetails.formats.empty() || swapchainDetails.presentModes.empty()) {
+        if (swapchain_details.formats.empty() || swapchain_details.presentModes.empty()) {
             throw std::runtime_error(
                     "Impressive work. You encountered an error though impossible.");
         }
 
-        return swapchainDetails;
+        return swapchain_details;
     }
 
     vk::SurfaceFormatKHR getFormat(const Graphics::Vulkan::SwapchainDetails *details) {
@@ -129,12 +129,12 @@ namespace Graphics::Vulkan {
         swapchain_info.oldSwapchain = nullptr;
 
         vkSwapchain = vulkanEnginePtr->GetDevicePtr()->createSwapchainKHR(swapchain_info);
-        println(std::cout, "---------Swapchain-Created--------");
+        std::println(std::cout, "---------Swapchain-Created--------");
     }
 
     void Graphics::DestroySwapChain() const {
         vulkanEnginePtr->GetDevicePtr()->destroySwapchainKHR(vkSwapchain);
-        println(std::cout, "-------Swapchain-Destroyed--------");
+        std::println(std::cout, "-------Swapchain-Destroyed--------");
     }
 
 } // namespace Graphics::Vulkan

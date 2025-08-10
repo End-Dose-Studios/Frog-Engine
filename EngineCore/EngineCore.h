@@ -6,6 +6,7 @@
 enum class GraphicsAPI : uint8_t {
     Vulkan = 0,
     OpenGL = 1,
+    None = 2,
 };
 
 namespace EngineCore {
@@ -15,15 +16,13 @@ namespace EngineCore {
         ~EngineCore();
 
         void StartEngineCore();
+        
+        Vulkan::Engine vulkanEngine;
 
-        Vulkan::Engine *GetVulkanEnginePtr();
-
-        GraphicsAPI selectedAPI = GraphicsAPI::Vulkan;
+        GraphicsAPI selectedAPI = GraphicsAPI::None;
         GLFWwindow *windowPtr{nullptr};
 
     private:
         Window window;
-
-        Vulkan::Engine vulkanEngine;
     };
 } // namespace EngineCore
