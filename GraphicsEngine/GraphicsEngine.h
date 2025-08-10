@@ -9,7 +9,7 @@ namespace EngineCore {
 
 namespace Graphics {
     struct SwapchainDetails {
-        vk::SurfaceCapabilitiesKHR capabilities{};
+        vk::SurfaceCapabilitiesKHR capabilities;
         std::vector<vk::SurfaceFormatKHR> formats;
         std::vector<vk::PresentModeKHR> presentModes;
     };
@@ -27,15 +27,15 @@ namespace Graphics {
 
         void CreateSwapchain();
         void DestroySwapChain() const;
-        vk::SwapchainKHR vkSwapchain{};
-        vk::SurfaceFormatKHR swapchainSurfaceFormat{};
-        vk::PresentModeKHR swapchainPresentMode{};
-        vk::Extent2D swapchainExtent{};
-        SwapchainDetails swapchainDetails{};
+        vk::SwapchainKHR vkSwapchain;
+        vk::SurfaceFormatKHR swapchainSurfaceFormat;
+        vk::PresentModeKHR swapchainPresentMode;
+        vk::Extent2D swapchainExtent;
+        SwapchainDetails swapchainDetails;
 
         void CreateSwapchainImages();
         void DestroySwapchainImages() const;
-        std::vector<vk::Image> swapchainImages{};
-        std::vector<vk::ImageView> swapchainImageViews{};
+        std::vector<vk::Image> swapchainImages;
+        std::vector<vk::ImageView> swapchainImageViews;
     };
 } // namespace Graphics
