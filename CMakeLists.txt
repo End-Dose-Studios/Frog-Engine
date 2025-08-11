@@ -59,6 +59,8 @@ add_library(FrogEngine STATIC
         src/GraphicsEngine/SwapchainImages.cpp
         src/AssetEngine/AssetCreator.cpp
         Src/FrogEngine/Vulkan/Vulkan.cpp
+        Src/GraphicsEngine/GraphicsPipeline.cpp
+        Src/GraphicsEngine/RenderPass.cpp
 )
 
 # =====================

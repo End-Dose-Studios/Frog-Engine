@@ -6,56 +6,51 @@
 #include <GraphicsEngine.h>
 
 namespace {
-    Graphics::SwapchainDetails getSwapChainDetails(const vk::PhysicalDevice *device,
-                                                   const vk::SurfaceKHR *surface) {
+    FrogEngine::Graphics::SwapchainDetails getSwapChainDetails(const vk::PhysicalDevice *device,
+                                                               const vk::SurfaceKHR *surface) {
 
-        Graphics::SwapchainDetails swapchain_details;
+        FrogEngine::Graphics::SwapchainDetails swapchain_details;
 
         swapchain_details.capabilities = device->getSurfaceCapabilitiesKHR(*surface);
         swapchain_details.formats = device->getSurfaceFormatsKHR(*surface);
         swapchain_details.presentModes = device->getSurfacePresentModesKHR(*surface);
 
-        if (swapchain_details.formats.empty() || swapchain_details.presentModes.empty()) {
+        if (swapchain_details.formats.empty() || swapchain_details.presentModes.empty())
             throw std::runtime_error(
                     "Impressive work. You encountered an error though impossible.");
-        }
 
         return swapchain_details;
     }
 
-    vk::SurfaceFormatKHR getFormat(const Graphics::SwapchainDetails *details) {
+    vk::SurfaceFormatKHR getFormat(const FrogEngine::Graphics::SwapchainDetails *details) {
         vk::SurfaceFormatKHR surface_format = details->formats[0];
 
-        for (const auto &format: details->formats) {
+        for (const auto &format: details->formats)
             if (format.format == vk::Format::eB8G8R8A8Srgb &&
-                format.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear) {
+                format.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear)
                 surface_format = format;
-            }
-        }
 
         return surface_format;
     }
 
-    vk::PresentModeKHR getPresent(const Graphics::SwapchainDetails *swap_chain_details) {
+    vk::PresentModeKHR
+    getPresent(const FrogEngine::Graphics::SwapchainDetails *swap_chain_details) {
         auto surface_present_mode = vk::PresentModeKHR::eFifo;
 
-        for (const auto &present_mode: swap_chain_details->presentModes) {
-            if (present_mode == vk::PresentModeKHR::eMailbox) {
+        for (const auto &present_mode: swap_chain_details->presentModes)
+            if (present_mode == vk::PresentModeKHR::eMailbox)
                 surface_present_mode = vk::PresentModeKHR::eMailbox;
-            }
-        }
 
         return surface_present_mode;
     }
 
-    vk::Extent2D getExtent(const Graphics::SwapchainDetails *swap_chain_details,
+    vk::Extent2D getExtent(const FrogEngine::Graphics::SwapchainDetails *swap_chain_details,
                            GLFWwindow *window) {
         vk::Extent2D extent;
         if (swap_chain_details->capabilities.currentExtent.width !=
             std::numeric_limits<uint32_t>::max()) {
             extent = swap_chain_details->capabilities.currentExtent;
-        }
-        else {
+        } else {
             int width{};
             int height{};
             glfwGetWindowSize(window, &width, &height);
@@ -77,7 +72,7 @@ namespace {
         return extent;
     }
 
-    uint32_t getImageCount(const Graphics::SwapchainDetails *swap_chain_details) {
+    uint32_t getImageCount(const FrogEngine::Graphics::SwapchainDetails *swap_chain_details) {
         uint32_t image_count = swap_chain_details->capabilities.minImageCount + 1;
         if (swap_chain_details->capabilities.maxImageCount > 0 &&
             image_count > swap_chain_details->capabilities.maxImageCount) {
@@ -89,8 +84,8 @@ namespace {
     }
 } // namespace
 
-namespace Graphics {
-    void GraphicsEngine::CreateSwapchain() {
+namespace FrogEngine::Graphics {
+    void GraphicsEngine::createSwapchain() {
         swapchainDetails = getSwapChainDetails(frogEnginePtr->vulkan.selectedDevice,
                                                &frogEnginePtr->vulkan.vkSurface);
 
@@ -107,7 +102,7 @@ namespace Graphics {
         swapchain_info.imageArrayLayers = 1;
         swapchain_info.imageUsage = vk::ImageUsageFlagBits::eColorAttachment;
 
-        const FrogEngine::QueueFamilyIndices *queue_indices = &frogEnginePtr->vulkan.queueIndices;
+        const Vulkan::QueueFamilyIndices *queue_indices = &frogEnginePtr->vulkan.queueIndices;
 
         const std::array<uint32_t, 2> queue_family_indices = {queue_indices->graphicsFamily,
                                                               queue_indices->presentFamily};
@@ -115,8 +110,7 @@ namespace Graphics {
             swapchain_info.imageSharingMode = vk::SharingMode::eConcurrent;
             swapchain_info.queueFamilyIndexCount = queue_family_indices.size();
             swapchain_info.pQueueFamilyIndices = queue_family_indices.data();
-        }
-        else {
+        } else {
             swapchain_info.imageSharingMode = vk::SharingMode::eExclusive;
             swapchain_info.queueFamilyIndexCount = 0;
             swapchain_info.pQueueFamilyIndices = nullptr;
@@ -131,9 +125,9 @@ namespace Graphics {
         std::println(std::cout, "---------Swapchain-Created--------");
     }
 
-    void GraphicsEngine::DestroySwapchain() const {
+    void GraphicsEngine::destroySwapchain() const {
         frogEnginePtr->vulkan.vkDevice.destroySwapchainKHR(vkSwapchain);
         std::println(std::cout, "-------Swapchain-Destroyed--------");
     }
 
-} // namespace Graphics
+}

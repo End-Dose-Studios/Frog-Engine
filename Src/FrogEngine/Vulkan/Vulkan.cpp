@@ -3,25 +3,25 @@
 #include <FrogEngine.h>
 #include <Vulkan.h>
 
-namespace FrogEngine {
+namespace FrogEngine::Vulkan {
     Vulkan::Vulkan(FrogEngine *frog_engine_ptr) { frogEnginePtr = frog_engine_ptr; }
 
     Vulkan::~Vulkan() {
-        DestroyLogicalDevice();
-        DestroySurface();
-        DestroyDebugMessenger();
-        DestroyInstance();
+        destroyLogicalDevice();
+        destroySurface();
+        destroyDebugMessenger();
+        destroyInstance();
     }
 
-    void Vulkan::StartVulkan() {
+    void Vulkan::initVulkan() {
         std::println(std::cout, "-------------Starting-Vulkan-Engine-------------");
-        CreateInstance();
-        CreateDebugMessenger();
-        GetPhysicalDevices();
-        CreateSurface();
-        GetQueueFamilyIndices();
-        CreateLogicalDevice();
+        createInstance();
+        createDebugMessenger();
+        getPhysicalDevices();
+        createSurface();
+        getQueueFamilyIndices();
+        createLogicalDevice();
         std::println(std::cout, "-------------Finished-Vulkan-Engine-------------\n");
     }
 
-} // namespace FrogEngine
+}

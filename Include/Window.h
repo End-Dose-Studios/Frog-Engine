@@ -4,16 +4,16 @@ struct GLFWwindow;
 struct GLFWmonitor;
 struct GLFWvidmode;
 
-namespace FrogEngine {
+namespace FrogEngine::Window {
     class Window {
     public:
         Window();
         ~Window();
 
-        void InitWindow();
+        void initWindow();
 
-        [[nodiscard]] bool GetFullscreen() const;
-        void SetFullscreen(bool new_fullscreen);
+        [[nodiscard]] bool getFullscreen() const;
+        void setFullscreen(bool new_fullscreen);
 
         GLFWwindow *window{nullptr};
 
@@ -27,4 +27,4 @@ namespace FrogEngine {
         int posY{};
         bool fullscreen{false};
     };
-} // namespace FrogEngine
+}

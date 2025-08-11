@@ -2,11 +2,12 @@
 
 #include <Vulkan.h>
 
-namespace FrogEngine {
-    void Vulkan::GetQueueFamilyIndices() {
+namespace FrogEngine::Vulkan {
+    void Vulkan::getQueueFamilyIndices() {
         std::println(std::cout, "------Getting-Queue-Families------");
 
-        const auto queue_families = selectedDevice->getQueueFamilyProperties();
+        const std::vector<vk::QueueFamilyProperties> queue_families =
+                selectedDevice->getQueueFamilyProperties();
 
         std::println(std::cout, "Queue Families: {}", queue_families.size());
 
@@ -15,14 +16,14 @@ namespace FrogEngine {
 
             std::println(std::cout, "  Queue Family: {}, Count: {}", i, family.queueCount);
 
-            if ((family.queueFlags & vk::QueueFlagBits::eGraphics) && !queueIndices.IsComplete()) {
+            if ((family.queueFlags & vk::QueueFlagBits::eGraphics) && !queueIndices.isComplete()) {
                 queueIndices.graphicsFamily = i;
                 queueIndices.graphicsCount = family.queueCount;
             }
 
             if (const vk::Bool32 present_support =
                         selectedDevice->getSurfaceSupportKHR(i, vkSurface);
-                present_support && !queueIndices.IsComplete()) {
+                present_support && !queueIndices.isComplete()) {
                 queueIndices.presentFamily = i;
                 queueIndices.presentCount = family.queueCount;
             }
@@ -39,15 +40,13 @@ namespace FrogEngine {
                 queueIndices.computeCount = family.queueCount;
             }
 
-            if (queueIndices.transferFamily != queueIndices.graphicsFamily) {
+            if (queueIndices.transferFamily != queueIndices.graphicsFamily)
                 queueIndices.idealTransferFamily = true;
-            }
             if (queueIndices.computeFamily != queueIndices.graphicsFamily &&
-                (queueIndices.computeFamily != queueIndices.transferFamily)) {
+                (queueIndices.computeFamily != queueIndices.transferFamily))
                 queueIndices.idealComputeFamily = true;
-            }
         }
-        if (!queueIndices.IsComplete())
+        if (!queueIndices.isComplete())
             throw std::runtime_error("Queue families are not complete.");
 
         std::println(std::cout, "Chosen queues:");
@@ -56,4 +55,4 @@ namespace FrogEngine {
         std::println(std::cout, "  Transfer: {}", queueIndices.transferFamily);
         std::println(std::cout, "  Compute: {}", queueIndices.computeFamily);
     }
-} // namespace FrogEngine
+}

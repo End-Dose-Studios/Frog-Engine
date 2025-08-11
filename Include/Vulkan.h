@@ -4,6 +4,8 @@
 
 namespace FrogEngine {
     class FrogEngine;
+}
+namespace FrogEngine::Vulkan {
 
     struct QueueFamilyIndices {
         uint32_t graphicsFamily{UINT32_MAX};
@@ -19,7 +21,7 @@ namespace FrogEngine {
         bool idealComputeFamily{false};
         bool idealTransferFamily{false};
 
-        [[nodiscard]] bool IsComplete() const {
+        [[nodiscard]] bool isComplete() const {
             return (graphicsFamily < UINT32_MAX) && (computeFamily < UINT32_MAX) &&
                    (presentCount < UINT32_MAX);
         }
@@ -30,7 +32,7 @@ namespace FrogEngine {
         explicit Vulkan(FrogEngine *frog_engine_ptr);
         ~Vulkan();
 
-        void StartVulkan();
+        void initVulkan();
 
 #ifndef NDEBUG
         bool enableDebugExtensions{true};
@@ -46,27 +48,27 @@ namespace FrogEngine {
         FrogEngine *frogEnginePtr;
 
     private:
-        void CreateInstance();
-        void DestroyInstance() const;
+        void createInstance();
+        void destroyInstance() const;
         vk::Instance vkInstance;
 
-        void CreateDebugMessenger();
-        void DestroyDebugMessenger() const;
+        void createDebugMessenger();
+        void destroyDebugMessenger() const;
         vk::DebugUtilsMessengerEXT vkDebugMessenger;
 
-        void GetPhysicalDevices();
+        void getPhysicalDevices();
         std::vector<vk::PhysicalDevice> physicalDevices;
 
-        void CreateSurface();
-        void DestroySurface() const;
+        void createSurface();
+        void destroySurface() const;
 
-        void GetQueueFamilyIndices();
+        void getQueueFamilyIndices();
 
-        void CreateLogicalDevice();
-        void DestroyLogicalDevice() const;
+        void createLogicalDevice();
+        void destroyLogicalDevice() const;
         vk::Queue vkGraphicsQueue;
         vk::Queue vkPresentQueue;
         vk::Queue vkTransferQueue;
         vk::Queue vkComputeQueue;
     };
-} // namespace FrogEngine
+}

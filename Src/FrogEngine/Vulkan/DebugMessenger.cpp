@@ -17,15 +17,12 @@ namespace {
     }
 
     const char *getType(const vk::DebugUtilsMessageTypeFlagsEXT type) {
-        if (type & vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral) {
+        if (type & vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral)
             return "General";
-        }
-        if (type & vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation) {
+        if (type & vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation)
             return "Validation";
-        }
-        if (type & vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance) {
+        if (type & vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance)
             return "Performance";
-        }
         return "No Type";
     }
 
@@ -44,9 +41,9 @@ namespace {
     }
 } // namespace
 
-namespace FrogEngine {
+namespace FrogEngine::Vulkan {
 
-    void Vulkan::CreateDebugMessenger() {
+    void Vulkan::createDebugMessenger() {
         if (!enableDebugExtensions)
             return;
 
@@ -64,13 +61,13 @@ namespace FrogEngine {
                                                                     vkGetInstanceProcAddr);
             vkInstance.createDebugUtilsMessengerEXT(&debug_messenger_info, nullptr,
                                                     &vkDebugMessenger,
-                                                    instance_loader) != vk::Result::eSuccess) {
+                                                    instance_loader) != vk::Result::eSuccess)
             throw std::runtime_error("Failed to create debug messenger");
-        };
+        
         std::println(std::cout, "-----Debug-Messenger-Created------");
     }
 
-    void Vulkan::DestroyDebugMessenger() const {
+    void Vulkan::destroyDebugMessenger() const {
         if (!enableDebugExtensions)
             return;
 
@@ -79,4 +76,4 @@ namespace FrogEngine {
         std::println(std::cout, "-----Debug-Messenger-Destroyed----");
     }
 
-} // namespace FrogEngine
+}

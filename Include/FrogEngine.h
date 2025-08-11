@@ -6,16 +6,20 @@
 #include <Window.h>
 
 namespace FrogEngine {
+    using FrogAsset = const void *;
+    using Package = std::list<Assets::Package>::iterator;
+    using GraphicsPipeline = Graphics::GraphicsPipeline;
+
     class FrogEngine {
     public:
         FrogEngine();
         ~FrogEngine();
 
-        void StartFrogEngine();
+        void startFrogEngine();
 
-        Vulkan vulkan;
+        Window::Window window;
+        Vulkan::Vulkan vulkan;
         Graphics::GraphicsEngine graphicsEngine;
         Assets::AssetEngine assetEngine;
-        Window window;
     };
-} // namespace FrogEngine
+}

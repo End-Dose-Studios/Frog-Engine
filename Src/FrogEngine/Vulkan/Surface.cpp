@@ -6,16 +6,16 @@
 
 #include <FrogEngine.h>
 
-namespace FrogEngine {
-    void Vulkan::CreateSurface() {
-        VkSurfaceKHR surface;
+namespace FrogEngine::Vulkan {
+    void Vulkan::createSurface() {
+        VkSurfaceKHR surface{VK_NULL_HANDLE};
         glfwCreateWindowSurface(vkInstance, frogEnginePtr->window.window, nullptr, &surface);
         vkSurface = surface;
         std::println(std::cout, "----------Surface-Created---------");
     }
 
-    void Vulkan::DestroySurface() const {
+    void Vulkan::destroySurface() const {
         vkInstance.destroySurfaceKHR(vkSurface);
         std::println(std::cout, "---------Surface-Destroyed--------");
     }
-} // namespace FrogEngine
+}

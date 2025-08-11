@@ -4,18 +4,20 @@
 
 #include "../../../Include/Window.h"
 
-namespace FrogEngine {
+namespace FrogEngine::Window {
     Window::Window() = default;
     Window::~Window() {
         glfwDestroyWindow(window);
         glfwTerminate();
     };
 
-    void Window::InitWindow() {
-        if (window) {
-            glfwDestroyWindow(window);
-            std::println(std::cout, "Destroyed Previous Window");
-        }
+    void Window::initWindow() {
+        std::println(std::cout, "------------Starting-Window-Creation------------");
+        if (!glfwInit())
+            throw std::runtime_error("Failed to initialize GLFW");
+        std::println(std::cout, "Initialized GLFW");
+
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
         monitor = glfwGetPrimaryMonitor();
         mode = glfwGetVideoMode(monitor);
@@ -27,9 +29,10 @@ namespace FrogEngine {
         glfwMakeContextCurrent(window);
         glfwGetWindowPos(window, &posX, &posY);
         std::println(std::cout, "Created Window\n  Size: (640 x 480)\n  TItle: Frog Engine");
+        std::println(std::cout, "------------Finished-Window-Creation------------\n");
     }
 
-    void Window::SetFullscreen(const bool new_fullscreen) {
+    void Window::setFullscreen(const bool new_fullscreen) {
         if (fullscreen == new_fullscreen)
             return;
 
@@ -43,6 +46,6 @@ namespace FrogEngine {
         glfwSetWindowMonitor(window, nullptr, posX, posY, width, height, GLFW_DONT_CARE);
     }
 
-    bool Window::GetFullscreen() const { return fullscreen; }
+    bool Window::getFullscreen() const { return fullscreen; }
 
-} // namespace FrogEngine
+}

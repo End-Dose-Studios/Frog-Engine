@@ -3,8 +3,8 @@
 #include <FrogEngine.h>
 #include <GraphicsEngine.h>
 
-namespace Graphics {
-    void GraphicsEngine::CreateSwapchainImages() {
+namespace FrogEngine::Graphics {
+    void GraphicsEngine::createSwapchainImages() {
         swapchainImages = frogEnginePtr->vulkan.vkDevice.getSwapchainImagesKHR(vkSwapchain);
 
         for (const auto &image: swapchainImages) {
@@ -34,11 +34,11 @@ namespace Graphics {
         }
     }
 
-    void GraphicsEngine::DestroySwapchainImages() const {
+    void GraphicsEngine::destroySwapchainImages() const {
         for (const auto &image_view: swapchainImageViews) {
             frogEnginePtr->vulkan.vkDevice.destroyImageView(image_view);
             std::println(std::cout, "-------Image-View-Destroyed-------");
         }
     }
 
-} // namespace Graphics
+}

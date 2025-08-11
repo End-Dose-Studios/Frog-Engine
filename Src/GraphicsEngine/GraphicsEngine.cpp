@@ -3,21 +3,21 @@
 #include <FrogEngine.h>
 #include <GraphicsEngine.h>
 
-namespace Graphics {
-    GraphicsEngine::GraphicsEngine(FrogEngine::FrogEngine *frog_engine_ptr) {
+namespace FrogEngine::Graphics {
+    GraphicsEngine::GraphicsEngine(FrogEngine *frog_engine_ptr) {
         frogEnginePtr = frog_engine_ptr;
         windowPtr = frog_engine_ptr->window.window;
     };
 
     GraphicsEngine::~GraphicsEngine() {
-        DestroySwapchainImages();
-        DestroySwapchain();
+        destroySwapchainImages();
+        destroySwapchain();
     }
 
-    void GraphicsEngine::StartGraphicsEngine() {
+    void GraphicsEngine::startGraphicsEngine() {
         std::println(std::cout, "------------Starting-Vulkan-Graphics------------");
-        CreateSwapchain();
-        CreateSwapchainImages();
+        createSwapchain();
+        createSwapchainImages();
         std::println(std::cout, "------------Finished-Vulkan-Graphics------------\n");
     }
-} // namespace Graphics
+}

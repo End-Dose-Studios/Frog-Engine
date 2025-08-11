@@ -2,22 +2,19 @@
 
 #include <AssetEngine.h>
 
-namespace Assets {
-    void Asset::CreateShader() {
-        VkShaderModuleCreateInfo shader_info{};
-        shader_info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+namespace FrogEngine::Assets {
+    void Asset::createShader() {
+        vk::ShaderModuleCreateInfo shader_module_info = {};
 
-        assert(data.size() % 4 == 0);
-        const auto *const code_ptr = reinterpret_cast<const uint32_t *>(data.data());
-        shader_info.pCode = code_ptr;
-        shader_info.codeSize = data.size();
+        shader_module_info.codeSize = size;
+        shader_module_info.pCode = reinterpret_cast<const uint32_t *>(data.data());
+        handle = device_ptr->createShaderModule(shader_module_info);
 
-        handle = devicePtr->createShaderModule(shader_info);
         std::println(std::cout, "---------{}-Created---------", name);
     }
 
-    void Asset::DestroyShader() {
-        devicePtr->destroyShaderModule(*static_cast<vk::ShaderModule *>(GetHandlePtr(handle)));
+    void Asset::destroyShader() {
+        device_ptr->destroyShaderModule(*static_cast<const vk::ShaderModule *>(getHandlePtr()));
         std::println(std::cout, "--------{}-Destroyed--------", name);
     }
-} // namespace Assets
+}

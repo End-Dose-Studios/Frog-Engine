@@ -25,55 +25,56 @@ namespace {
     }
 } // namespace
 
-namespace Assets {
-    void *GetHandlePtr(APIHandle handle) {
+namespace FrogEngine::Assets {
+    void Asset::createHandle() {
+        switch (type) {
+            case AssetType::SHADER:
+                createShader();
+                break;
+            default:
+                break;
+        }
+    }
+
+    void Asset::destroyHandle() {
+        switch (type) {
+            case AssetType::SHADER:
+                destroyShader();
+                break;
+            default:
+                break;
+        }
+    }
+
+    const void *Asset::getHandlePtr() const {
         return std::visit(
-                []<typename t0>(const t0 &arg) -> void *
+                []<typename T0>(const T0 &val) -> const void *
                 {
-                    using T = std::decay_t<t0>;
-                    if constexpr (std::is_same_v<T, std::monostate>)
+                    if constexpr (std::is_same_v<std::decay_t<T0>, std::monostate>) {
                         return nullptr;
-                    else
-                        return static_cast<void *>(const_cast<std::remove_const_t<T> *>(&arg));
+                    } else {
+                        return static_cast<const void *>(&val);
+                    }
                 },
                 handle);
     }
 
-    void Asset::CreateHandle() {
-        switch (type) {
-            case AssetType::Shader:
-                CreateShader();
-                break;
-            default:
-                break;
-        }
-    }
+    const void *Package::queryAssets(AssetType asset_type, const std::string &asset_name) {
+        if (const auto asset = assetMap.find({asset_type, asset_name}); asset != assetMap.end()) {
+            if (!asset->second->getHandlePtr())
+                asset->second->createHandle();
 
-    void Asset::DestroyHandle() {
-        switch (type) {
-            case AssetType::Shader:
-                DestroyShader();
-                break;
-            default:
-                break;
-        }
-    }
-
-    void *Package::QueryAssets(AssetType type, const std::string &name) {
-        if (const auto asset = assetMap.find({type, name}); asset != assetMap.end()) {
-            if (GetHandlePtr(asset->second->handle) == nullptr)
-                asset->second->CreateHandle();
-            return GetHandlePtr(asset->second->handle);
+            return asset->second->getHandlePtr();
         }
         return nullptr;
     }
 
-    AssetEngine::AssetEngine(const FrogEngine::FrogEngine *frog_engine_ptr) {
-        devicePtr = &frog_engine_ptr->vulkan.vkDevice;
+    AssetEngine::AssetEngine(const FrogEngine *frog_engine_ptr) {
+        device_ptr = &frog_engine_ptr->vulkan.vkDevice;
     };
     AssetEngine::~AssetEngine() = default;
 
-    void AssetEngine::StartAssetLoader() {
+    void AssetEngine::startAssetLoader() {
         std::println(std::cout, "-------------Starting-Asset-Engine-------------");
 
         std::array<char, MAX_PATH> path{};
@@ -81,14 +82,12 @@ namespace Assets {
                 GetModuleFileNameA(nullptr, path.data(), static_cast<DWORD>(path.size()));
 
         const std::filesystem::path app_path = std::string(path.data(), length);
-        if (!exists(app_path)) {
+        if (!exists(app_path))
             throw std::runtime_error("Failed to get the path of the executable.");
-        }
 
         const std::filesystem::path package_directory = app_path.parent_path().append("Packages");
-        if (!exists(package_directory)) {
+        if (!exists(package_directory))
             throw std::runtime_error("Could not find packages directory");
-        }
         std::println(std::cout, "Found: {}", package_directory.string());
 
         for (const auto &package: std::filesystem::directory_iterator(package_directory)) {
@@ -107,7 +106,7 @@ namespace Assets {
         std::println(std::cout, "-------------Finished-Asset-Engine--------------\n");
     }
 
-    Package *AssetEngine::LoadPackage(const char *package_name) {
+    std::list<Package>::iterator AssetEngine::loadPackage(const char *package_name) {
         for (const auto &[pack_name, pack_path]: packageReferences) {
             if (pack_name != package_name)
                 continue;
@@ -117,9 +116,8 @@ namespace Assets {
             package->name = pack_name;
 
             std::ifstream file(pack_path, std::ios::binary);
-            if (!file.is_open()) {
+            if (!file.is_open())
                 throw std::runtime_error("Could not open package file.");
-            }
 
             uint32_t magic_string{};
             readUInt(file, magic_string);
@@ -144,28 +142,21 @@ namespace Assets {
 
         std::println(std::cout, "-------Loaded {}-------", package_name);
 
-        return &loadedPackages.back();
+        return std::prev(loadedPackages.end());
     }
 
-    void AssetEngine::UnloadPackage(Package *&package) {
-        if (!package)
+    void AssetEngine::unloadPackage(std::list<Package>::iterator &package) {
+        if (package == loadedPackages.end())
             return;
 
-        const auto target_package = std::ranges::find_if(
-                loadedPackages, [&](const Package &pack) { return &pack == package; });
-
-        for (auto &asset: package->assets) {
-            if (GetHandlePtr(asset.handle) != nullptr)
-                asset.DestroyHandle();
-        }
+        for (auto &asset: package->assets)
+            if (asset.getHandlePtr() != nullptr)
+                asset.destroyHandle();
 
         std::string pack_name = package->name;
 
-        if (target_package != loadedPackages.end())
-            loadedPackages.erase(target_package);
+        package = loadedPackages.erase(package);
 
         std::println(std::cout, "------Unloaded {}------\n", pack_name);
-
-        package = nullptr;
     }
-} // namespace Assets
+}

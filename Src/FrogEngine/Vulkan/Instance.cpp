@@ -22,57 +22,54 @@ namespace {
         std::vector<const char *> extensions(span.begin(), span.end());
 
         extensions.emplace_back(vk::KHRPortabilityEnumerationExtensionName);
-        if (enable_debug_extensions) {
+        if (enable_debug_extensions)
             extensions.emplace_back(vk::EXTDebugUtilsExtensionName);
-        }
 
-        auto available_extensions = vk::enumerateInstanceExtensionProperties();
+
+        std::vector<vk::ExtensionProperties> available_extensions =
+                vk::enumerateInstanceExtensionProperties();
 
         std::vector<const char *> extensions_check(extensions.begin(), extensions.end());
-        for (const auto &[extensionName, specVersion]: available_extensions) {
+        for (const auto &[extensionName, specVersion]: available_extensions)
             std::erase_if(extensions_check, [&](const char *ext)
                           { return strcmp(ext, extensionName) == 0; }); // NOLINT
-        }
-        if (!extensions_check.empty()) {
+
+        if (!extensions_check.empty())
             throw std::runtime_error("Missing required extensions.");
-        }
 
         std::println(std::cout, "Instance Extensions:");
-        for (const auto extension: extensions) {
+        for (const auto *const extension: extensions)
             std::println(std::cout, "  {}", extension);
-        }
 
         return extensions;
     }
 
     std::vector<const char *> getLayers(const bool enable_debug_extensions) {
         std::vector<const char *> layers;
-        if (enable_debug_extensions) {
+        if (enable_debug_extensions)
             layers.emplace_back("VK_LAYER_KHRONOS_validation");
-        }
 
-        const auto available_layers = vk::enumerateInstanceLayerProperties();
+        const std::vector<vk::LayerProperties> available_layers =
+                vk::enumerateInstanceLayerProperties();
 
         std::vector<const char *> layer_check(layers.begin(), layers.end());
-        for (const auto available_layer: available_layers) {
+        for (const auto available_layer: available_layers)
             std::erase_if(layer_check, [&](const char *ext)
                           { return strcmp(ext, available_layer.layerName) == 0; }); // NOLINT
-        }
-        if (!layer_check.empty()) {
+
+        if (!layer_check.empty())
             throw std::runtime_error("Missing required layers.");
-        }
 
         std::println(std::cout, "Instance Layers:");
-        for (const auto layer: layers) {
+        for (const auto *const layer: layers)
             std::println(std::cout, "  {}", layer);
-        }
 
         return layers;
     }
 } // namespace
 
-namespace FrogEngine {
-    void Vulkan::CreateInstance() {
+namespace FrogEngine::Vulkan {
+    void Vulkan::createInstance() {
         vk::ApplicationInfo app_info;
         app_info.pApplicationName = "FrogEngine";
         app_info.applicationVersion = vk::makeApiVersion(0, 1, 0, 0);
@@ -95,8 +92,8 @@ namespace FrogEngine {
         std::println(std::cout, "---------Instance-Created---------");
     }
 
-    void Vulkan::DestroyInstance() const {
+    void Vulkan::destroyInstance() const {
         vkInstance.destroy();
         std::println(std::cout, "--------Instance Destroyed--------");
     }
-} // namespace FrogEngine
+}

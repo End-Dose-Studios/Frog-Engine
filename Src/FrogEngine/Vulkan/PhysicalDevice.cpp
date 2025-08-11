@@ -6,13 +6,14 @@ namespace {
     int checkExtensionSupport(const vk::PhysicalDevice *device) {
         int score{0};
 
-        const auto available_extensions = device->enumerateDeviceExtensionProperties();
+        const std::vector<vk::ExtensionProperties> available_extensions =
+                device->enumerateDeviceExtensionProperties();
 
         std::vector<const char *> extension_check{vk::KHRSwapchainExtensionName};
-        for (const auto [extensionName, specVersion]: available_extensions) {
+        for (const auto [extensionName, specVersion]: available_extensions)
             std::erase_if(extension_check, [&](const char *ext)
                           { return strcmp(ext, extensionName) == 0; }); // NOLINT
-        }
+
         if (!extension_check.empty())
             score = -INT16_MAX;
 
@@ -22,7 +23,7 @@ namespace {
     int getProperties(const vk::PhysicalDevice *device) {
         int score{0};
 
-        const auto device_properties = device->getProperties();
+        const vk::PhysicalDeviceProperties device_properties = device->getProperties();
 
         std::println(std::cout, "  Name: {}", device_properties.deviceName.data());
         std::println(std::cout, "  Type: {}",
@@ -40,7 +41,8 @@ namespace {
                          : -DEVICE_TYPE_WEIGHT;
 
         constexpr int VULKAN_VERSION_MINOR_WEIGHT{50};
-        score += VULKAN_VERSION_MINOR_WEIGHT * vk::apiVersionMinor(device_properties.apiVersion);
+        score += VULKAN_VERSION_MINOR_WEIGHT *
+                 static_cast<int>(vk::apiVersionMinor(device_properties.apiVersion));
 
         return score;
     }
@@ -48,16 +50,16 @@ namespace {
     int getFeatures(const vk::PhysicalDevice *device) {
         int score{0};
 
-        const auto device_features = device->getFeatures();
+        const vk::PhysicalDeviceFeatures device_features = device->getFeatures();
 
         std::println(std::cout, "  Geometry Shader: {}",
                      static_cast<bool>(device_features.geometryShader));
         std::println(std::cout, "  Tessellation Shader: {}",
                      static_cast<bool>(device_features.tessellationShader));
 
-        constexpr uint32_t SHADER_SUPPORT_WEIGHT{500};
-        score += SHADER_SUPPORT_WEIGHT *
-                 (device_features.geometryShader + device_features.tessellationShader);
+        constexpr int SHADER_SUPPORT_WEIGHT{500};
+        score += SHADER_SUPPORT_WEIGHT * static_cast<int>(device_features.geometryShader +
+                                                          device_features.tessellationShader);
 
         return score;
     }
@@ -65,20 +67,19 @@ namespace {
     int getMemoryProperties(const vk::PhysicalDevice *device) {
         int score{0};
 
-        const auto memory_properties = device->getMemoryProperties();
+        const vk::PhysicalDeviceMemoryProperties memory_properties = device->getMemoryProperties();
 
         uint64_t v_ram = 0;
-        for (const auto &[size, flags]: memory_properties.memoryHeaps) {
+        for (const auto &[size, flags]: memory_properties.memoryHeaps)
             if (flags & vk::MemoryHeapFlagBits::eDeviceLocal)
                 v_ram += size;
-        }
 
         constexpr uint64_t BYTES_TO_GIGABYTES{1048576};
         const float v_ram_gb = static_cast<float>(v_ram) / static_cast<float>(BYTES_TO_GIGABYTES);
         std::println(std::cout, "  VRAM: {} Mb", static_cast<int>(v_ram_gb + 0.5)); // NOLINT
 
         constexpr uint64_t VRAM_WEIGHT{20};
-        score += static_cast<uint32_t>(
+        score += static_cast<int>(
                 static_cast<float>(v_ram) /
                 (static_cast<float>(BYTES_TO_GIGABYTES) * static_cast<float>(VRAM_WEIGHT)));
 
@@ -98,13 +99,13 @@ namespace {
     }
 } // namespace
 
-namespace FrogEngine {
-    void Vulkan::GetPhysicalDevices() {
+namespace FrogEngine::Vulkan {
+    void Vulkan::getPhysicalDevices() {
         std::println(std::cout, "----Finding-All-Engine-Devices----");
 
         const std::vector<vk::PhysicalDevice> devices = vkInstance.enumeratePhysicalDevices();
 
-        uint32_t highest_score{};
+        int highest_score{};
         uint32_t highest_score_index{};
         for (size_t i = 0; i < devices.size(); i++) {
             std::println(std::cout, "Device: {}", i);
@@ -121,4 +122,4 @@ namespace FrogEngine {
                      selectedDevice->getProperties().deviceName.data());
     }
 
-} // namespace FrogEngine
+}

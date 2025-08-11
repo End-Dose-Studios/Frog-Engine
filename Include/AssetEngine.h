@@ -7,21 +7,20 @@
 
 #include <vulkan/vulkan.hpp>
 
+enum AssetType : uint8_t {
+    TEXTURE,
+    MODEL,
+    SHADER,
+};
+
 namespace FrogEngine {
     class FrogEngine;
 }
-namespace Assets {
 
-    inline const vk::Device *devicePtr;
-
-    enum AssetType : uint8_t {
-        Texture,
-        Model,
-        Shader,
-    };
+namespace FrogEngine::Assets {
+    inline const vk::Device *device_ptr;
 
     using APIHandle = std::variant<std::monostate, vk::ShaderModule>;
-    void *GetHandlePtr(APIHandle handle);
 
     struct Asset {
         AssetType type;
@@ -30,11 +29,14 @@ namespace Assets {
         std::vector<uint8_t> data;
 
         APIHandle handle;
-        void CreateHandle();
-        void DestroyHandle();
 
-        void CreateShader();
-        void DestroyShader();
+        [[nodiscard]] const void *getHandlePtr() const;
+
+        void createHandle();
+        void destroyHandle();
+
+        void createShader();
+        void destroyShader();
     };
 
     struct AssetHash {
@@ -55,21 +57,21 @@ namespace Assets {
 
         std::unordered_map<std::pair<AssetType, std::string>, Asset *, AssetHash> assetMap;
 
-        void *QueryAssets(AssetType type, const std::string &name);
+        const void *queryAssets(AssetType asset_type, const std::string &asset_name);
     };
 
     class AssetEngine {
     public:
-        explicit AssetEngine(const FrogEngine::FrogEngine *frog_engine_ptr);
+        explicit AssetEngine(const FrogEngine *frog_engine_ptr);
         ~AssetEngine();
 
-        void StartAssetLoader();
+        void startAssetLoader();
 
-        Package *LoadPackage(const char *package_name);
-        void UnloadPackage(Package *&package);
+        std::list<Package>::iterator loadPackage(const char *package_name);
+        void unloadPackage(std::list<Package>::iterator &package);
 
     private:
         std::list<Package> loadedPackages;
         std::vector<PackageReference> packageReferences;
     };
-} // namespace Assets
+}

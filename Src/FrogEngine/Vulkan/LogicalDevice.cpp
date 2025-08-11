@@ -4,8 +4,8 @@
 
 #include <Vulkan.h>
 
-namespace FrogEngine {
-    void Vulkan::CreateLogicalDevice() {
+namespace FrogEngine::Vulkan {
+    void Vulkan::createLogicalDevice() {
         std::set const queue_indices{queueIndices.graphicsFamily, queueIndices.presentFamily,
                                      queueIndices.computeFamily, queueIndices.transferFamily};
 
@@ -23,9 +23,8 @@ namespace FrogEngine {
 
         const std::vector<const char *> device_extensions{vk::KHRSwapchainExtensionName};
         std::vector<const char *> validation_layers{};
-        if (enableDebugExtensions) {
+        if (enableDebugExtensions)
             validation_layers.emplace_back("VK_LAYER_KHRONOS_validation");
-        }
 
         const vk::PhysicalDeviceFeatures device_features = selectedDevice->getFeatures();
 
@@ -41,16 +40,15 @@ namespace FrogEngine {
         vkDevice = selectedDevice->createDevice(device_info);
         std::println(std::cout, "------Logical-Device-Created------");
 
-
         vkGraphicsQueue = vkDevice.getQueue(queueIndices.graphicsFamily, 0);
         vkGraphicsQueue = vkDevice.getQueue(queueIndices.presentFamily, 0);
         vkGraphicsQueue = vkDevice.getQueue(queueIndices.transferFamily, 0);
         vkGraphicsQueue = vkDevice.getQueue(queueIndices.computeFamily, 0);
     }
 
-    void Vulkan::DestroyLogicalDevice() const {
+    void Vulkan::destroyLogicalDevice() const {
         vkDevice.destroy();
         std::println(std::cout, "-----Logical-Device-Destroyed-----");
     }
 
-} // namespace FrogEngine
+}
